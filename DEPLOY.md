@@ -131,6 +131,10 @@ git add -A && git commit -m "改了什么" && git push
 
 ## 五、常见问题
 
+**后台打开是空白 / 控制台报 `Sveltia CMS only works with HTTPS or localhost URLs`**
+→ CMS 的安全限制：**必须用 https 访问 `/admin/`**（`localhost` 例外）。
+EdgeOne 默认就是 https，正常情况不会遇到；如果是用 http 的自定义域名或裸 IP 访问就会这样。
+
 **构建失败 `ERR_PNPM_NO_LOCKFILE` / 依赖版本不一致**
 → 确认构建命令是 `npm install`（不是 pnpm），Node 版本 20。
 

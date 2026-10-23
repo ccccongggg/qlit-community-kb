@@ -18,6 +18,11 @@ backend:
   #   2. 取消下面这行注释，填你的 Worker 地址
   # base_url: https://sveltia-cms-auth.example.workers.dev
 
+  # 只显示「使用访问令牌登录」。
+  # 没配 base_url 时 OAuth 按钮点了必然失败，留着只会让人困惑；
+  # 将来部署好 sveltia-cms-auth 后，把这行改成 [oauth, token] 即可两种都能用。
+  auth_methods: [token]
+
   commit_messages:
     create: "cms(新建): {{collection}} {{slug}}"
     update: "cms(更新): {{collection}} {{slug}}"
