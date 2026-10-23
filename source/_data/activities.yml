@@ -3,7 +3,7 @@
 # 在 CMS 后台「活动库」里改这里即可，不用碰 HTML
 
 hero:
-  title: "我们的高光时刻 📸"
+  title: "我们的高光时刻"
   sub: "待办的活动、办过的活动，时间地点图片视频都收在这里。想参加就盯紧「即将举办」，想回味就翻「往期回顾」。"
 
 # 即将举办（status: soon → 卡片带「报名中」红边；没有报名链接可留空）
@@ -46,4 +46,4 @@ past:
     video: ""
 
 # 页脚提示（支持 HTML）
-footer_html: '📣 办了活动想留档？把时间地点图片视频发给<a href="/people/yin-xiancong/">大使</a>，我们帮你收进这里。'
+footer_html: '办了活动想留档？把时间地点图片视频发给<a href="/people/yin-xiancong/">大使</a>，我们帮你收进这里。'

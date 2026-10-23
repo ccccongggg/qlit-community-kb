@@ -5,7 +5,7 @@ top_img: false
 ---
 
 <div class="kb-hero">
-  <h2 class="kb-hero__title">把痛点变成产品 💡</h2>
+  <h2 class="kb-hero__title">把痛点变成产品</h2>
   <p class="kb-hero__sub">每个人都可以把自己发现的社会痛点、自己遇到的困难丢进来。我们试试用 AI 解决它，产出产品，发到社交媒体推广，拿到资源再反哺社群。一个人走得快，一群人走得远。</p>
 </div>
 

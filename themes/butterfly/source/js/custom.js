@@ -137,6 +137,9 @@
   /* ---------- 5. 首屏物理商标（仅首页存在 #kb-hero-stage 时启用） ---------- */
   var stage = document.getElementById("kb-hero-stage");
   if (!stage) return;
+  /* 手机端不启动物理：canvas 会吃手指手势（滚不动页面），
+     两个圆也只能挤在首屏底部占掉一大块空白。样式层已同步隐藏 #phys。 */
+  if (window.matchMedia("(max-width: 760px)").matches) return;
 
   var hero = stage;
   var cv = document.getElementById("phys");
@@ -354,4 +357,118 @@
   measure();
   window.addEventListener("load", measure);
   requestAnimationFrame(frame);
+})();
+
+/* ============================================================
+   V2：顶栏导航（滑块指示器 + 移动端下拉抽屉）
+   ============================================================ */
+(function () {
+  "use strict";
+
+  var menus = document.getElementById("menus");
+  var ind = document.getElementById("kb-nav-ind");
+  var burger = document.getElementById("kb-burger");
+  var mask = document.getElementById("kb-mask");
+  if (!menus) return;
+
+  var links = Array.prototype.slice.call(menus.querySelectorAll("a.kb-link"));
+
+  /* ---------- 1. 当前页高亮 ---------- */
+  var path = location.pathname.replace(/index\.html$/, "");
+  if (path.charAt(path.length - 1) !== "/") path += "/";
+  var activeLink = null;
+  links.forEach(function (a) {
+    var hp = (a.getAttribute("href") || "").split("?")[0].replace(/index\.html$/, "");
+    if (hp.length > 1 && path.indexOf(hp) === 0) {
+      a.classList.add("active");
+      activeLink = a;
+    }
+  });
+
+  /* ---------- 2. 滑块指示器（桌面） ---------- */
+  function moveInd(el, hideIfNone) {
+    if (!ind) return;
+    if (!el) {
+      ind.style.opacity = "0";
+      return;
+    }
+    var mr = menus.getBoundingClientRect();
+    var r = el.getBoundingClientRect();
+    if (!r.width) {
+      ind.style.opacity = "0";
+      return;
+    }
+    ind.style.width = Math.round(r.width) + "px";
+    ind.style.transform = "translateX(" + Math.round(r.left - mr.left) + "px)";
+    ind.style.opacity = "1";
+  }
+
+  function resetInd() {
+    if (activeLink) moveInd(activeLink);
+    else if (ind) ind.style.opacity = "0";
+  }
+
+  links.forEach(function (a) {
+    a.addEventListener("mouseenter", function () {
+      moveInd(a);
+    });
+  });
+  menus.addEventListener("mouseleave", resetInd);
+  window.addEventListener("resize", function () {
+    requestAnimationFrame(resetInd);
+  });
+  window.addEventListener("load", function () {
+    requestAnimationFrame(resetInd);
+  });
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      requestAnimationFrame(resetInd);
+    });
+  }
+  requestAnimationFrame(function () {
+    menus.classList.add("kb-ind-ready");
+    resetInd();
+  });
+
+  /* ---------- 3. 移动端抽屉 ---------- */
+  function setMenu(open) {
+    document.body.classList.toggle("kb-menu-open", !!open);
+    if (burger) burger.setAttribute("aria-expanded", open ? "true" : "false");
+    if (burger) burger.setAttribute("aria-label", open ? "收起目录" : "展开目录");
+  }
+
+  if (burger) {
+    burger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setMenu(!document.body.classList.contains("kb-menu-open"));
+    });
+  }
+  if (mask) {
+    mask.addEventListener("click", function () {
+      setMenu(false);
+    });
+  }
+  links.forEach(function (a) {
+    a.addEventListener("click", function () {
+      setMenu(false);
+    });
+  });
+  var themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function () {
+      // 切主题后收起抽屉，避免挡住首屏
+      setTimeout(function () {
+        setMenu(false);
+      }, 160);
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && document.body.classList.contains("kb-menu-open")) setMenu(false);
+  });
+  var mq = window.matchMedia("(min-width: 761px)");
+  function onMq() {
+    if (mq.matches) setMenu(false);
+  }
+  if (mq.addEventListener) mq.addEventListener("change", onMq);
+  else if (mq.addListener) mq.addListener(onMq);
 })();

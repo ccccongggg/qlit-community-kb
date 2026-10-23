@@ -7,17 +7,15 @@ nav#nav
       i.kb-rule
       span.kb-brand__sub 齐鲁理工 · 校园社群
 
-  //- 目录：四大板块入口
+  //- 目录：四大板块入口（桌面横排 / 移动端变成下拉抽屉）
   #menus
-    - const kbEntries = [['01', '知识库', '/kb/'], ['02', '问题库', '/problems/'], ['03', '活动库', '/activities/'], ['04', '社群大佬', '/people/']]
-    each entry, i in kbEntries
-      a.kb-link(href=url_for(entry[2]))
-        span.kb-num= entry[0]
-        b= entry[1]
-      if i < kbEntries.length - 1
-        i.kb-dot
+    - const kbEntries = [['知识库', '/kb/'], ['问题库', '/problems/'], ['活动库', '/activities/'], ['社群大佬', '/people/']]
+    i#kb-nav-ind(aria-hidden='true')
+    each entry in kbEntries
+      a.kb-link(href=url_for(entry[1]))
+        b= entry[0]
 
-    //- 昼夜切换
+    //- 昼夜切换（桌面在菜单尾部，移动端落在抽屉底部）
     button#themeToggle(type='button' aria-label='切换白天 / 黑夜主题' title='切换白天 / 黑夜主题')
       svg.ic-moon(viewBox='0 0 24 24' fill='currentColor')
         path(d='M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z')
@@ -28,7 +26,16 @@ nav#nav
         span.tt-day 白天
         span.tt-night 黑夜
 
-  //- 保留 Butterfly 移动端汉堡钩子（CSS 中桌面隐藏、小屏也强制展开目录）
+  //- 移动端触发按钮（三条线，展开时收成 X）
+  button#kb-burger(type='button' aria-label='展开目录' aria-expanded='false' aria-controls='menus')
+    span
+    span
+    span
+
+  //- 抽屉遮罩
+  #kb-mask(aria-hidden='true')
+
+  //- 保留 Butterfly 移动端汉堡钩子（我们不用它，但删掉会在 main.js 里报错）
   #toggle-menu
     span.site-page
       i.fas.fa-bars.fa-fw

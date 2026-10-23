@@ -153,3 +153,40 @@ EdgeOne 默认就是 https，正常情况不会遇到；如果是用 http 的自
 
 **中文界面没生效**
 → `config.yml` 的 `locale: zh_Hans`，Sveltia 若某版本不认会回退英文，不影响使用。
+
+---
+
+## 改代码后必须知道的两个坑
+
+**1. 改了 `scripts/` 里的东西，一定要全量重建**
+
+`scripts/acts-tag.js`、`people-generator.js`、`icon-tag.js` 是 Hexo 的 tag / generator。
+Hexo 会把**渲染后的正文**缓存在 `db.json` 里，判断依据是「源 md 有没有变」。
+只改脚本、不改 md 时，`hexo generate` 会直接复用旧正文，你的改动**看起来完全没生效**。
+
+正确姿势：
+```bash
+rm -f db.json            # 关键：清掉正文缓存
+npx hexo generate
+```
+改主题 CSS / JS 不受影响（那是静态资源，每次都会复制）。
+
+**2. 主题资源带版本号，改完要手动 +1**
+
+`themes/butterfly/_config.yml` 的 `inject` 段里：
+```yaml
+- <link rel="stylesheet" href="/css/custom.css?v=20261023i">
+- <script src="/js/custom.js?v=20261023c" defer></script>
+```
+静态托管会缓存旧文件，不加版本号访客可能继续用旧样式。改 CSS 就升 css 的号，改 JS 就升 js 的号。
+
+## 双主题说明
+
+站点**没有用** Butterfly 原生的 `data-theme` 暗色模式（已在 `themes/butterfly/_config.yml` 里 `darkmode.enable: false` 关掉）。
+现在的机制是自定义的：
+- 深色（默认）：`:root` 里的 token
+- 浅色：`body.light` 类覆盖 token
+- 持久化：`localStorage['kb-theme']`，值为 `dark` / `light`
+- 切换按钮：顶栏 `#themeToggle`
+
+所以：**别再开 Butterfly 的暗色模式**，否则会出现两套状态互相打架、页面上多一个月亮按钮。

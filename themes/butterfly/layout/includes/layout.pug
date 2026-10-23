@@ -10,6 +10,7 @@ html(lang=config.language data-theme=theme.display_mode class=htmlClassHideAside
   head
     include ./head.pug
   body
+    include ./kb-icons.pug
     !=partial('includes/loading/index', {}, {cache: true})
 
     if theme.background
@@ -39,10 +40,11 @@ html(lang=config.language data-theme=theme.display_mode class=htmlClassHideAside
 
     !=partial('includes/sidebar', {}, {cache: true})
 
-    #body-wrap(class=pageType + (is_home ? ' kb-home' : ''))
+    - var isHomePage = is_home()
+    #body-wrap(class=pageType + (isHomePage ? ' kb-home' : ' kb-page'))
       include ./header/index.pug
 
-      if is_home
+      if isHomePage
         block hero
 
       main#content-inner.layout(class=hideAside)

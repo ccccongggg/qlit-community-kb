@@ -1,15 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="AI · 设计">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#BA7517"/>
-      <stop offset="1" stop-color="#854F0B"/>
+    <linearGradient id="bg-design" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3E2E92"/><stop offset="1" stop-color="#180F3D"/>
     </linearGradient>
+    <radialGradient id="gl-design" cx="0.76" cy="0.2" r="0.66">
+      <stop offset="0" stop-color="#A992FF" stop-opacity="0.26"/><stop offset="1" stop-color="#A992FF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="gd-design" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0v40" fill="none" stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
   </defs>
-  <rect width="1200" height="675" fill="url(#g)"/>
-  <circle cx="980" cy="120" r="180" fill="#ffffff" opacity="0.10"/>
-  <circle cx="150" cy="560" r="120" fill="#ffffff" opacity="0.08"/>
-  <circle cx="600" cy="337" r="210" fill="#ffffff" opacity="0.14"/>
-  <text x="600" y="360" font-size="200" text-anchor="middle" dominant-baseline="central">🎨</text>
-  <text x="60" y="590" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="62" font-weight="700" fill="#ffffff">AI · 设计</text>
-  <text x="62" y="640" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="26" fill="#ffffff" opacity="0.85">零基础出图做物料</text>
+  <rect width="1200" height="675" fill="url(#bg-design)"/>
+  <rect width="1200" height="675" fill="url(#gd-design)"/>
+  <rect width="1200" height="675" fill="url(#gl-design)"/>
+  <g fill="none" stroke="#A992FF" stroke-opacity="0.5">
+    <circle cx="876" cy="232" r="96" stroke-opacity="0.34"/>
+    <circle cx="876" cy="232" r="158" stroke-opacity="0.17"/>
+    <circle cx="876" cy="232" r="226" stroke-opacity="0.09"/>
+  </g>
+  <rect x="46" y="46" width="1108" height="583" fill="none" stroke="#FFFFFF" stroke-opacity="0.13"/>
+  <g stroke="#A992FF" stroke-opacity="0.62" stroke-width="2" fill="none">
+    <path d="M46 78v-32h32"/><path d="M1122 46h32v32"/><path d="M1154 597v32h-32"/><path d="M78 629H46v-32"/>
+  </g>
+  <g transform="translate(876 232) scale(5.9) translate(-12 -12)" fill="none" stroke="#A992FF"
+     stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" color="#A992FF"><circle cx="12" cy="12" r="8.6"/><circle cx="9.1" cy="9.8" r="1.05" fill="currentColor"/><circle cx="14.9" cy="9.8" r="1.05" fill="currentColor"/><circle cx="12" cy="15.4" r="1.05" fill="currentColor"/></g>
+  <text x="92" y="128" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="17" letter-spacing="5.5" fill="#A992FF" fill-opacity="0.95">04 &#183; AI DESIGN</text>
+  <path d="M92 152h44" stroke="#A992FF" stroke-width="2" stroke-opacity="0.8"/>
+  <text x="88" y="452" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="86" font-weight="700" letter-spacing="2" fill="#FFFFFF">AI · 设计</text>
+  <path d="M92 498h208" stroke="#FFFFFF" stroke-width="1.6" stroke-opacity="0.32"/>
+  <text x="92" y="546" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="27" letter-spacing="1.2" fill="#FFFFFF" fill-opacity="0.66">从提示词到成品的那条链路</text>
 </svg>

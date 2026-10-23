@@ -411,9 +411,11 @@ readmode: true
 
 # Dark Mode
 darkmode:
-  enable: true
+  # 站点使用自有双主题（body.light + localStorage 'kb-theme'），
+  # Butterfly 原生 data-theme 机制会与它打架（多一个月亮按钮 + 两套状态），故关闭
+  enable: false
   # Toggle Button to switch dark/light mode
-  button: true
+  button: false
   # Switch dark/light mode automatically
   # autoChangeMode: 1  Following System Settings, if the system doesn't support dark mode, it will switch dark mode between 6 pm to 6 am
   # autoChangeMode: 2  Switch dark mode between 6 pm to 6 am
@@ -1093,9 +1095,9 @@ inject:
   head:
     # ?v= 为发布版本号：每次改动 custom.css / custom.js 后必须手动 +1，
     # 否则浏览器可能继续用旧缓存（静态托管按 URL 授权，旧 403 缓存会污染样式）
-    - <link rel="stylesheet" href="/css/custom.css?v=20261023f">
+    - <link rel="stylesheet" href="/css/custom.css?v=20261023i">
   bottom:
-    - <script src="/js/custom.js?v=20261023a" defer></script>
+    - <script src="/js/custom.js?v=20261023c" defer></script>
 
 # CDN Settings
 # Don't modify the following settings unless you know how they work

@@ -5,28 +5,28 @@ top_img: false
 ---
 
 <div class="kb-hero">
-  <h2 class="kb-hero__title">把好东西攒起来，一起变强 📚</h2>
+  <h2 class="kb-hero__title">把好东西攒起来，一起变强</h2>
   <p class="kb-hero__sub">这里收纳社群成员、各位负责人沉淀下来的实战经验，以及我们用 AI 在不同领域「搞事情」的应用笔记。看见好东西，就丢进来。</p>
 </div>
 
 <div class="kb-grid">
   <a class="kb-card kb-card--exp" href="/categories/知识库/成员经验/">
-    <span class="kb-card__ico">🧑‍🎓</span>
+    <span class="kb-card__ico">{% icon users %}</span>
     <h3>成员经验</h3>
     <p>同学们踩过的坑、趟出的路、随手记的妙招。</p>
-    <span class="kb-card__go">去看看 →</span>
+    <span class="kb-card__go">去看看 {% icon arrow 14 %}</span>
   </a>
   <a class="kb-card kb-card--lead" href="/categories/知识库/负责人经验/">
-    <span class="kb-card__ico">🧭</span>
+    <span class="kb-card__ico">{% icon compass %}</span>
     <h3>负责人经验</h3>
     <p>社群主理人们带项目的复盘、招新、协作心法。</p>
-    <span class="kb-card__go">去看看 →</span>
+    <span class="kb-card__go">去看看 {% icon arrow 14 %}</span>
   </a>
   <a class="kb-card kb-card--ai" href="/categories/知识库/AI应用/">
-    <span class="kb-card__ico">🤖</span>
+    <span class="kb-card__ico">{% icon chip %}</span>
     <h3>AI 应用</h3>
     <p>用 WorkBuddy / 大模型在 coding、设计、学习里落地的玩法。</p>
-    <span class="kb-card__go">去看看 →</span>
+    <span class="kb-card__go">去看看 {% icon arrow 14 %}</span>
   </a>
 </div>
 
@@ -39,6 +39,6 @@ top_img: false
 </div>
 
 <div class="kb-cta">
-  <span>📮 有想沉淀的经验？发给<a href="/people/yin-xiancong/">社群大使</a>，我们帮你整理成一篇。</span>
-  <a class="kb-cta__btn" href="/categories/知识库/">浏览全部知识 →</a>
+  <span>{% icon megaphone 16 %} 有想沉淀的经验？发给<a href="/people/yin-xiancong/">社群大使</a>，我们帮你整理成一篇。</span>
+  <a class="kb-cta__btn" href="/categories/知识库/">浏览全部知识 {% icon arrow 14 %}</a>
 </div>

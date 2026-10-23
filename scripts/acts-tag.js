@@ -33,12 +33,15 @@ function card(item, isSoon) {
       "</span>"
     : "";
 
-  // 「🗓 时间 ｜ 📍 地点」
+  // 元信息：时间 / 地点，用线性图标替代原来的 🗓 📍 表情
+  const ico = function (name) {
+    return '<svg class="kb-i act-meta__ico" aria-hidden="true"><use href="#i-' + name + '"></use></svg>';
+  };
   const metaBits = [];
-  if (item.date) metaBits.push("🗓 " + esc(item.date));
-  if (item.place) metaBits.push("📍 " + esc(item.place));
+  if (item.date) metaBits.push('<span class="act-meta__i">' + ico("clock") + esc(item.date) + "</span>");
+  if (item.place) metaBits.push('<span class="act-meta__i">' + ico("pin") + esc(item.place) + "</span>");
   const meta = metaBits.length
-    ? '<p class="act-meta">' + metaBits.join(" ｜ ") + "</p>"
+    ? '<p class="act-meta">' + metaBits.join('<i class="act-meta__sep"></i>') + "</p>"
     : "";
 
   const desc = item.desc ? '<p class="act-desc">' + esc(item.desc) + "</p>" : "";
@@ -109,7 +112,7 @@ hexo.extend.tag.register("acts", function () {
       "</div>";
   }
 
-  html += '<h3 class="kb-sub">🔜 即将举办</h3>';
+  html += '<h3 class="kb-sub">即将举办</h3>';
   html +=
     '<div class="act-grid">' +
     (upcoming.length
@@ -123,7 +126,7 @@ hexo.extend.tag.register("acts", function () {
     html += '<p class="kb-empty">暂时没有排期，关注群里通知，或者找大使提议一场。</p>';
   }
 
-  html += '<h3 class="kb-sub">✨ 往期回顾</h3>';
+  html += '<h3 class="kb-sub">往期回顾</h3>';
   html +=
     '<div class="act-grid">' +
     (past.length

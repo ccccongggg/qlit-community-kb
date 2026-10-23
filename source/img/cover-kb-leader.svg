@@ -1,15 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="负责人复盘">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#534AB7"/>
-      <stop offset="1" stop-color="#3C3489"/>
+    <linearGradient id="bg-leader" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6E4A10"/><stop offset="1" stop-color="#2E1F08"/>
     </linearGradient>
+    <radialGradient id="gl-leader" cx="0.76" cy="0.2" r="0.66">
+      <stop offset="0" stop-color="#F5B54A" stop-opacity="0.26"/><stop offset="1" stop-color="#F5B54A" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="gd-leader" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0v40" fill="none" stroke="#FFFFFF" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
   </defs>
-  <rect width="1200" height="675" fill="url(#g)"/>
-  <circle cx="980" cy="120" r="180" fill="#ffffff" opacity="0.10"/>
-  <circle cx="150" cy="560" r="120" fill="#ffffff" opacity="0.08"/>
-  <circle cx="600" cy="337" r="210" fill="#ffffff" opacity="0.14"/>
-  <text x="600" y="360" font-size="200" text-anchor="middle" dominant-baseline="central">🧭</text>
-  <text x="60" y="590" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="62" font-weight="700" fill="#ffffff">负责人经验</text>
-  <text x="62" y="640" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="26" fill="#ffffff" opacity="0.85">主理人带项目的复盘</text>
+  <rect width="1200" height="675" fill="url(#bg-leader)"/>
+  <rect width="1200" height="675" fill="url(#gd-leader)"/>
+  <rect width="1200" height="675" fill="url(#gl-leader)"/>
+  <g fill="none" stroke="#F5B54A" stroke-opacity="0.5">
+    <circle cx="876" cy="232" r="96" stroke-opacity="0.34"/>
+    <circle cx="876" cy="232" r="158" stroke-opacity="0.17"/>
+    <circle cx="876" cy="232" r="226" stroke-opacity="0.09"/>
+  </g>
+  <rect x="46" y="46" width="1108" height="583" fill="none" stroke="#FFFFFF" stroke-opacity="0.13"/>
+  <g stroke="#F5B54A" stroke-opacity="0.62" stroke-width="2" fill="none">
+    <path d="M46 78v-32h32"/><path d="M1122 46h32v32"/><path d="M1154 597v32h-32"/><path d="M78 629H46v-32"/>
+  </g>
+  <g transform="translate(876 232) scale(5.9) translate(-12 -12)" fill="none" stroke="#F5B54A"
+     stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" color="#F5B54A"><path d="M5.5 21V3.8"/><path d="M5.5 4.2h11l-2.2 3.6 2.2 3.6h-11z"/></g>
+  <text x="92" y="128" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="17" letter-spacing="5.5" fill="#F5B54A" fill-opacity="0.95">02 &#183; OWNER REVIEW</text>
+  <path d="M92 152h44" stroke="#F5B54A" stroke-width="2" stroke-opacity="0.8"/>
+  <text x="88" y="452" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="86" font-weight="700" letter-spacing="2" fill="#FFFFFF">负责人复盘</text>
+  <path d="M92 498h208" stroke="#FFFFFF" stroke-width="1.6" stroke-opacity="0.32"/>
+  <text x="92" y="546" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif" font-size="27" letter-spacing="1.2" fill="#FFFFFF" fill-opacity="0.66">带项目的判断与取舍</text>
 </svg>
