@@ -1,0 +1,23 @@
+# 首页首屏文案（CMS 后台「首页文案」直接编辑）
+# 说明：sub_html / 按钮文案支持 HTML（可以用 <code>、<b> 等标签）
+
+kicker: 齐鲁理工 · 校园社群
+
+title_line1: 社群
+title_line2: 知识库
+
+sub_html: 知学 · 知道 · 知善 · 知美 —— 用<code>AI</code>把好东西攒起来，一起变强。
+
+cta1_text: 从知识库开始 →
+cta1_link: /kb/
+cta2_text: 我是新生
+cta2_link: /people/
+
+# 首屏底部那行小灰字提示
+hint: 这两个商标是有重力的 —— 按住拖动它们，甩出去让两者撞在一起
+
+# 跑马灯（滚动的三句口号）
+marquee:
+  - text: 知学 · 知道 · 知善 · 知美 ·
+  - text: 把好东西攒起来一起变强 ·
+  - text: QILU INSTITUTE OF TECHNOLOGY ·

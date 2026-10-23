@@ -1,0 +1,374 @@
+# ============================================================
+# 齐鲁理工 · WorkBuddy 社群知识库 —— 内容管理后台配置
+# 后台地址：https://<你的域名>/admin/
+# 编辑器：Sveltia CMS（Decap/Netlify CMS 的兼容替代，配置格式一致）
+# ============================================================
+
+backend:
+  name: github
+  repo: cccongggg/qlit-community-kb
+  branch: main
+
+  # 【登录方式】
+  # 默认用 GitHub Personal Access Token 登录：点「Sign in with Token」，
+  # 粘贴一个有 repo 权限的 token 即可（单人/小团队最省事，不需要任何服务器）。
+  #
+  # 若以后要让不带 GitHub 账号的同学也能登录，改成 OAuth 授权码流程：
+  #   1. 把 sveltia-cms-auth 部署到 Cloudflare Workers（详见 DEPLOY.md）
+  #   2. 取消下面这行注释，填你的 Worker 地址
+  # base_url: https://sveltia-cms-auth.example.workers.dev
+
+  commit_messages:
+    create: "cms(新建): {{collection}} {{slug}}"
+    update: "cms(更新): {{collection}} {{slug}}"
+    delete: "cms(删除): {{collection}} {{slug}}"
+    uploadMedia: "cms(上传图片): {{path}}"
+    deleteMedia: "cms(删除图片): {{path}}"
+
+# 后台界面语言（简体中文）
+locale: zh_Hans
+
+# 图片上传后存放在源文件目录，构建时会一起发布
+media_folder: source/img/uploads
+public_folder: /img/uploads
+
+# 顶栏信息
+site_url: https://community-kb.app.workbuddy.host
+display_url: community-kb.app.workbuddy.host
+logo_url: /img/logo-mark.svg
+
+# 编辑器：不做站点预览（Hexo 需构建，实时预览没有意义，避免空白面板误导）
+editor:
+  preview: false
+
+collections:
+  # ---------------- 文章（知识库 + 问题库案例） ----------------
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    description: 知识库经验帖、问题库案例都写在这里。发布后自动出现在对应分类与首页「最新动态」。
+    folder: source/_posts
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: ["date", "title"]
+    fields:
+      - name: title
+        label: 标题
+        widget: string
+        hint: 一句话说清这篇讲什么，别用「随便记一下」这种。
+      - name: date
+        label: 发布日期
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm"
+        format: "YYYY-MM-DD HH:mm:ss"
+        required: true
+      - name: categories
+        label: 分类路径
+        widget: list
+        required: true
+        default: ["知识库"]
+        hint: |
+          按层级从上到下填（回车分隔）：
+          第 1 行填大板块 → 知识库 或 问题库
+          第 2 行填子分类 → AI应用 / 编程 / 设计 / 成员经验 / 负责人经验
+          （问题库的文章只填「问题库」一行即可）
+      - name: tags
+        label: 标签
+        widget: list
+        required: false
+        hint: 回车分隔，如 知学、效率、协作
+      - name: cover
+        label: 封面图
+        widget: image
+        required: false
+        hint: 可不填；上传的图片会自动存到 /img/uploads/
+      - name: body
+        label: 正文
+        widget: markdown
+        hint: 支持 Markdown：## 小标题、**粗体**、> 引用、- 列表、[链接](https://...)
+
+  # ---------------- 社群大佬（成员名单） ----------------
+  - name: people
+    label: 社群大佬
+    description: 成员卡片与详情页都由这份名单生成，改完自动同步。
+    files:
+      - name: list
+        label: 成员名单
+        file: source/_data/people.yml
+        fields:
+          - name: list
+            label: 成员
+            label_singular: 成员
+            widget: list
+            hint: 拖动可调整在「社群大佬」页面里的显示顺序
+            summary: "{{fields.name}} · {{fields.role}}"
+            fields:
+              - name: slug
+                label: 网址标识
+                widget: string
+                hint: 英文小写 + 连字符（如 yin-xiancong）。改了旧链接会失效。
+              - name: name
+                label: 姓名
+                widget: string
+              - name: avatar
+                label: 头像
+                widget: image
+                required: false
+                hint: 建议正方形图片，不填会显示空白
+              - name: role
+                label: 身份 / 头衔
+                widget: string
+                hint: 如「社群发起人 · WorkBuddy 校园大使」
+              - name: ptags
+                label: 方向标签
+                widget: list
+                hint: 回车分隔，如 技术、内容、设计
+              - name: intro
+                label: 一句话介绍
+                widget: text
+              - name: skills
+                label: 能力分布
+                widget: list
+                required: false
+                summary: "{{fields.name}} {{fields.level}}%"
+                fields:
+                  - name: name
+                    label: 能力名
+                    widget: string
+                  - name: level
+                    label: 熟练度（0-100）
+                    widget: number
+                    value_type: int
+                    min: 0
+                    max: 100
+                    default: 80
+              - name: projects
+                label: 做过的事
+                widget: list
+                required: false
+                summary: "{{fields.name}}"
+                fields:
+                  - name: name
+                    label: 项目名
+                    widget: string
+                  - name: desc
+                    label: 一句话说明
+                    widget: string
+
+  # ---------------- 活动库 ----------------
+  - name: activities
+    label: 活动库
+    description: 「即将举办」与「往期回顾」的卡片都来自这里。
+    files:
+      - name: activities
+        label: 活动内容
+        file: source/_data/activities.yml
+        fields:
+          - name: hero
+            label: 页面顶部文案
+            widget: object
+            fields:
+              - name: title
+                label: 大标题
+                widget: string
+              - name: sub
+                label: 副标题
+                widget: text
+          - name: upcoming
+            label: 即将举办
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            hint: 没有排期就留空，页面会显示「暂时没有排期」
+            fields:
+              - name: title
+                label: 活动名
+                widget: string
+              - name: badge
+                label: 角标文字
+                widget: string
+                default: 报名中
+              - name: date
+                label: 时间
+                widget: string
+                hint: 如「2026-10-26（周三）19:00」
+              - name: place
+                label: 地点
+                widget: string
+              - name: desc
+                label: 一句话介绍
+                widget: text
+              - name: cover
+                label: 封面图
+                widget: image
+                required: false
+              - name: action_text
+                label: 按钮文字
+                widget: string
+                required: false
+                hint: 如「找大使报名 →」，不填则不显示按钮
+              - name: action_link
+                label: 按钮链接
+                widget: string
+                required: false
+                hint: 站内写 /people/yin-xiancong/，站外写完整 https 地址
+
+          - name: past
+            label: 往期回顾
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - name: title
+                label: 活动名
+                widget: string
+              - name: badge
+                label: 角标文字
+                widget: string
+                default: 已办
+              - name: date
+                label: 日期
+                widget: string
+                hint: 建议写成「2026-09-20」这种格式
+              - name: place
+                label: 地点
+                widget: string
+              - name: desc
+                label: 一句话回顾
+                widget: text
+              - name: cover
+                label: 封面图
+                widget: image
+                required: false
+              - name: gallery
+                label: 现场图
+                widget: list
+                required: false
+                summary: "{{fields.alt}}"
+                fields:
+                  - name: src
+                    label: 图片
+                    widget: image
+                  - name: alt
+                    label: 图片说明
+                    widget: string
+                    hint: 给看不见图的人听的一句话描述
+              - name: video
+                label: 视频嵌入地址
+                widget: string
+                required: false
+                hint: 可留空；填 B 站/腾讯视频的 iframe src 即可（https://player.bilibili.com/player.html?bvid=...）
+
+          - name: footer_html
+            label: 页脚提示
+            widget: text
+            required: false
+            hint: 支持 HTML，例如 <a href="/people/yin-xiancong/">大使</a>
+
+  # ---------------- 首页文案 ----------------
+  - name: home
+    label: 首页文案
+    description: 首页首屏的大标题、副标题、按钮、跑马灯口号。改完需要重新构建才生效。
+    files:
+      - name: home
+        label: 首屏文案
+        file: source/_data/home.yml
+        fields:
+          - name: kicker
+            label: 顶部小字
+            widget: string
+          - name: title_line1
+            label: 主标题第一行
+            widget: string
+            hint: 这一行是描边（空心）字
+          - name: title_line2
+            label: 主标题第二行
+            widget: string
+            hint: 这一行是实心渐变色
+          - name: sub_html
+            label: 副标题
+            widget: text
+            hint: 支持 HTML，如用 <code>AI</code> 让词变成代码块样式
+          - name: cta1_text
+            label: 主按钮文字
+            widget: string
+          - name: cta1_link
+            label: 主按钮链接
+            widget: string
+          - name: cta2_text
+            label: 次按钮文字
+            widget: string
+          - name: cta2_link
+            label: 次按钮链接
+            widget: string
+          - name: hint
+            label: 物理商标提示
+            widget: string
+          - name: marquee
+            label: 跑马灯口号
+            widget: list
+            hint: 每行一句，会循环滚动
+            fields:
+              - name: text
+                label: 文案
+                widget: string
+
+  # ---------------- 板块首页 ----------------
+  - name: pages
+    label: 板块首页
+    description: 知识库 / 问题库 / 社群大佬 三个板块的页面内容。
+    files:
+      - name: kb
+        label: 知识库首页
+        file: source/kb/index.md
+        fields:
+          - name: title
+            label: 页面标题
+            widget: string
+          - name: layout
+            label: 布局（请勿修改）
+            widget: string
+            hint: 必须保持 page
+          - name: top_img
+            label: 顶部大图开关（请勿修改）
+            widget: boolean
+            default: false
+          - name: body
+            label: 页面内容
+            widget: markdown
+            hint: 这里的卡片是 HTML，改动时保留 class 名，否则样式会丢
+      - name: problems
+        label: 问题库首页
+        file: source/problems/index.md
+        fields:
+          - name: title
+            label: 页面标题
+            widget: string
+          - name: layout
+            label: 布局（请勿修改）
+            widget: string
+          - name: top_img
+            label: 顶部大图开关（请勿修改）
+            widget: boolean
+            default: false
+          - name: body
+            label: 页面内容
+            widget: markdown
+            hint: 这里的闭环流程是 HTML，改动时保留 class 名
+      - name: people
+        label: 社群大佬首页
+        file: source/people/index.md
+        fields:
+          - name: title
+            label: 页面标题
+            widget: string
+          - name: layout
+            label: 布局（请勿修改）
+            widget: string
+          - name: top_img
+            label: 顶部大图开关（请勿修改）
+            widget: boolean
+            default: false

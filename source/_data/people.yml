@@ -1,0 +1,47 @@
+# 社群大佬名单（CMS 后台「社群大佬」直接编辑；列表页与详情页都由这里生成）
+list:
+  - slug: yin-xiancong
+    name: 印贤聪
+    avatar: /img/people/yin-xiancong.svg
+    role: 社群发起人 · WorkBuddy 校园大使
+    ptags: [技术, 项目管理, 硬件]
+    intro: 嵌入式 + 机械 + 控制软件三栖工程背景，带队打黑客松。喜欢用 AI 把重复活儿自动化，也爱带着同学从 0 到 1 做项目。
+    skills:
+      - { name: 嵌入式, level: 92 }
+      - { name: 机械设计, level: 80 }
+      - { name: 前端 / Web, level: 70 }
+      - { name: 项目管理, level: 85 }
+    projects:
+      - { name: outfit-mystic, desc: 电子衣橱 × AI 玄学搭配 Web 应用 }
+      - { name: 弦养 S4, desc: 八段锦 × 古琴疗愈 H5 }
+      - { name: link2_studio, desc: Insta360 云台控制平台 }
+
+  - slug: li-siyu
+    name: 李思雨
+    avatar: /img/people/li-siyu.svg
+    role: 内容主理 · 文案 / 创意
+    ptags: [内容, 文案, 创意]
+    intro: 负责社群的内容产出与活动文案，点子多、落地快，擅长把技术项目讲成人话，让外行也看得懂、想参与。
+    skills:
+      - { name: 文案写作, level: 90 }
+      - { name: 社群运营, level: 82 }
+      - { name: 视觉审美, level: 75 }
+      - { name: 活动策划, level: 80 }
+    projects:
+      - { name: 塔罗全链路, desc: 社群塔罗内容模块 M5 }
+      - { name: 招新推文, desc: 单篇阅读 3000+ }
+
+  - slug: stlwitch
+    name: stlwitch
+    avatar: /img/people/stlwitch.svg
+    role: 视觉 / 内容设计
+    ptags: [设计, 插画, 排版]
+    intro: 把控社群整体视觉调性，从吉祥物到海报一手包办，审美在线、交付稳定，是社群「颜值担当」。
+    skills:
+      - { name: 插画, level: 88 }
+      - { name: UI 设计, level: 84 }
+      - { name: 排版, level: 80 }
+      - { name: 动效, level: 72 }
+    projects:
+      - { name: 社群 VI, desc: 吉祥物 + 视觉规范体系 }
+      - { name: 受控词表, desc: 服装风格 / 色 / 品类打标体系 }

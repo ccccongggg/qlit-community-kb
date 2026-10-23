@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://community-kb.app.workbuddy.host/sitemap.xml

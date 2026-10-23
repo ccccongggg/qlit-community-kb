@@ -1,0 +1,78 @@
+---
+layout: false
+title: 页面走丢了
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>页面走丢了 · 齐鲁理工 · WorkBuddy 社群知识库</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { color-scheme: dark; }
+  body {
+    --c-ink: #E9F5F1; --c-muted: rgba(233,245,241,.72); --c-a1: #28B894; --c-link: #5FE3C0;
+    --c-page: #070B14; --c-card-bg: rgba(255,255,255,.055); --c-card-border: rgba(255,255,255,.14);
+    --c-btn-bg: #28B894; --c-btn-fg: #04231C;
+    margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: radial-gradient(120% 100% at 20% 0%, #152238 0%, #0B1120 52%, #070B14 100%);
+    color: var(--c-ink); -webkit-font-smoothing: antialiased;
+  }
+  body.light {
+    --c-ink: #0E2A23; --c-muted: rgba(14,42,35,.66); --c-a1: #12A87F; --c-link: #0B7A5D;
+    --c-page: #EAF1EE; --c-card-bg: #FFFFFF; --c-card-border: #0E2A23;
+    --c-btn-bg: #0B7A5D; --c-btn-fg: #F2FBF7;
+    color-scheme: light;
+    background: radial-gradient(110% 100% at 82% 6%, #DFF7EE 0%, #F1F7F4 46%, #EAF1EE 100%);
+  }
+  .box { text-align: center; padding: 48px 24px; max-width: 560px; }
+  .mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 64px; height: 64px; border-radius: 18px; font-size: 34px; font-weight: 800;
+    background: linear-gradient(135deg, #9E0C24, #D6000F); color: #fff; margin-bottom: 22px;
+    box-shadow: 0 10px 30px rgba(214,0,15,.35);
+  }
+  h1 { font-size: clamp(30px, 6vw, 44px); margin: 0 0 14px; letter-spacing: .02em; }
+  p { color: var(--c-muted); font-size: 15.5px; line-height: 1.85; margin: 0 0 30px; }
+  .code {
+    display: inline-block; margin: 0 0 26px; padding: 6px 14px; border-radius: 999px;
+    background: var(--c-card-bg); border: 1px solid var(--c-card-border);
+    color: var(--c-link); font-size: 13px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  }
+  .btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  a.btn {
+    display: inline-flex; align-items: center; padding: 12px 22px; border-radius: 12px;
+    font-size: 14.5px; font-weight: 700; text-decoration: none; transition: transform .25s;
+  }
+  a.btn:hover { transform: translateY(-2px); }
+  a.btn-solid { background: var(--c-btn-bg); color: var(--c-btn-fg); }
+  a.btn-line { border: 1.5px solid var(--c-card-border); color: var(--c-link); background: var(--c-card-bg); }
+  .foot { margin-top: 40px; font-size: 12.5px; color: var(--c-muted); letter-spacing: .06em; }
+</style>
+</head>
+<body>
+  <main class="box">
+    <div class="mark">知</div>
+    <div class="code" id="path">404 Not Found</div>
+    <h1>页面走丢了</h1>
+    <p>这个地址可能不存在、被移动过，或者输入时打错了字。<br>别担心，知识还在——从下面随便找个入口回去吧。</p>
+    <div class="btns">
+      <a class="btn btn-solid" href="/">回首页 →</a>
+      <a class="btn btn-line" href="/kb/">去知识库逛逛</a>
+      <a class="btn btn-line" href="/people/">认识社群大佬</a>
+    </div>
+    <div class="foot">齐鲁理工 · WorkBuddy 校园社群知识库 ｜ 知学 · 知道 · 知善 · 知美</div>
+  </main>
+  <script>
+    try {
+      var t = localStorage.getItem('kb-theme');
+      if (t === 'light' || (!t && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+        document.body.classList.add('light');
+      }
+      document.getElementById('path').textContent = '404 · ' + (location.pathname || '/');
+    } catch (e) {}
+  </script>
+</body>
+</html>

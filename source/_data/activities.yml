@@ -1,0 +1,49 @@
+# 活动库数据源
+# 由 scripts/acts-tag.js 渲染成 /activities/ 页面
+# 在 CMS 后台「活动库」里改这里即可，不用碰 HTML
+
+hero:
+  title: "我们的高光时刻 📸"
+  sub: "待办的活动、办过的活动，时间地点图片视频都收在这里。想参加就盯紧「即将举办」，想回味就翻「往期回顾」。"
+
+# 即将举办（status: soon → 卡片带「报名中」红边；没有报名链接可留空）
+upcoming:
+  - title: 黑客松集训夜
+    badge: 报名中
+    date: 2026-10-26（周三）19:00
+    place: 创客空间 302
+    desc: 30 小时极限开发，从 idea 到 demo。现场有学长带飞，零基础也能组队。
+    cover: /img/activity/ac-1.svg
+    action_text: 找大使报名 →
+    action_link: /people/yin-xiancong/
+
+# 往期回顾
+past:
+  - title: AI 工具分享会
+    badge: 已办 · 09-20
+    date: "2026-09-20"
+    place: 图书馆报告厅
+    desc: 8 位同学分享了自己在学习和项目里用 AI 的骚操作，现场气氛拉满。
+    cover: /img/activity/ac-2.svg
+    gallery:
+      - src: /img/activity/ac-2.svg
+        alt: "AI 工具分享会现场：讲台视角"
+      - src: /img/activity/ac-3.svg
+        alt: "AI 工具分享会现场：听众席视角"
+    video: ""
+
+  - title: 校园市集摊位
+    badge: 已办 · 09-08
+    date: "2026-09-08"
+    place: 一食堂前广场
+    desc: 我们摆了个「AI 帮你改简历」摊，一下午帮 40 多个同学过了简历。
+    cover: /img/activity/ac-3.svg
+    gallery:
+      - src: /img/activity/ac-1.svg
+        alt: "校园市集摊位：横幅视角"
+      - src: /img/activity/ac-2.svg
+        alt: "校园市集摊位：排队改简历视角"
+    video: ""
+
+# 页脚提示（支持 HTML）
+footer_html: '📣 办了活动想留档？把时间地点图片视频发给<a href="/people/yin-xiancong/">大使</a>，我们帮你收进这里。'
