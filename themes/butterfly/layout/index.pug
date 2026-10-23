@@ -53,6 +53,11 @@ block hero
         a.btn.btn-solid(href=url_for(HOME.cta1_link || '/kb/'))= HOME.cta1_text || '从知识库开始 →'
         a.btn.btn-line(href=url_for(HOME.cta2_link || '/people/'))= HOME.cta2_text || '我是新生'
 
+    //- 移动端静态商标（桌面由 canvas#phys 的物理引擎接管，手机不跑物理但也要有物件感）
+    .hero-marks
+      img.hm.hm-w(src=kbimg('/img/wb-logo.svg') alt="WorkBuddy")
+      img.hm.hm-q(src=kbimg('/img/qlit-badge.png') alt="齐鲁理工学院")
+
     .phys-hint
       i
       | #{HOME.hint || '这两个商标是有重力的 —— 按住拖动它们，甩出去让两者撞在一起'}

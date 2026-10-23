@@ -1795,7 +1795,9 @@ body.light #kb-mask { background: rgba(14, 42, 35, .34); }
    手机端不再跑物理（JS 同步跳过初始化），首屏高度改由内容撑起。
    ============================================================ */
 @media (max-width: 760px) {
-  #phys { display: none !important; }
+  /* 手机端物理球照旧（可玩性保留）。手势冲突交给 custom.js 的
+     touchstart 精确拦截：按住球才 preventDefault，其余区域正常滚动。 */
+  #phys { display: block; }
   #kb-hero-stage {
     height: auto;
     min-height: min(calc(100svh - var(--kb-topbar-h)), 520px);
@@ -2126,4 +2128,108 @@ body.light .kb-onb:hover .kb-onb__no { -webkit-text-stroke-color: rgba(11, 102, 
   .kb-onb:hover { transform: none; }
   .kb-guide__card:hover .kb-guide__ico,
   .kb-onb:hover .kb-onb__no { transform: none; }
+}
+
+/* ============================================================
+   V6 · 移动端首屏再校准（用户真机截图反馈）
+   实测 390×844：
+     ① 首屏被 min(100svh-顶栏, 520px) 卡在 520px，跑马灯在 y=531，
+        下面还露出「从这里开始」标题 —— 一屏里塞了两节内容，显乱；
+     ② #phys / .t-code 在 ≤760px 被整体隐藏，右侧只剩大片空白，
+        看起来像"右边内容被截掉了"。
+   处理：首屏钉死「一屏高 + 跑马灯贴底」；补回静态商标 + 缩小版代码窗，
+        把右侧视觉重量补回来（静态摆放，不跑物理也不吃手势）。
+   ============================================================ */
+
+/* 静态商标只在手机端出现，且仅作「物理没跑起来」时的兜底；
+   custom.js 在精灵就绪后给 body 加 .phys-on，这里就把它撤掉。 */
+.hero-marks { display: none; }
+body.phys-on .hero-marks { display: none !important; }
+
+@media (max-width: 760px) {
+  /* ① 一屏高：下一节必须滚动才出现，跑马灯正好压在视口底边 */
+  #kb-hero-stage {
+    height: calc(100svh - var(--kb-topbar-h));
+    min-height: 480px;
+    overflow: hidden;
+  }
+  /* 内容靠 flex:1 垂直居中。底部多留一截 → 中心整体上移，
+     把下半屏让给静态商标，避免"上下一大片空、东西全挤在中间" */
+  .hero-inner { padding-left: 22px; padding-right: 22px; padding-bottom: 104px; }
+
+  /* ② 右上角代码窗：缩成一张「贴纸」，只做装饰不抢标题 */
+  .t-code {
+    display: block;
+    right: 4.2%;
+    top: 7.5%;
+    width: 112px;
+    border-width: 2.5px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 0 var(--c-shadow);
+  }
+  .t-code .bar { padding: 5px 7px; gap: 4px; }
+  .t-code .bar i { width: 6px; height: 6px; }
+  .t-code .code { padding: 7px 8px; font-size: 8.5px; line-height: 1.7; }
+  .t-code .cur { width: 5px; height: 8px; vertical-align: -1px; }
+
+  /* ③ 静态商标：只作「物理没跑起来」的兜底。
+     延迟 0.5s 才淡入 —— 物理相机通常在 0.2s 内就绪并给 body 加 .phys-on，
+     加了就 display:none，静态球根本不会出现；只有 JS 挂了/图挂了才看得到它。
+     这样避免「静态球和物理球同时在屏上」的穿帮。 */
+  .hero-marks {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 62px;
+    width: 200px;
+    height: 230px;
+    z-index: 12;
+    pointer-events: none;
+    opacity: 0;
+    animation: marksIn .35s ease .5s forwards;
+  }
+  .hero-marks .hm {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .40));
+    animation: hmFloat 7s ease-in-out infinite;
+  }
+  .hero-marks .hm-q {
+    right: 26px;
+    bottom: 10px;
+    width: 68px;
+    height: 68px;
+    animation-delay: -2.4s;
+  }
+  .hero-marks .hm-w {
+    right: 100px;
+    bottom: 88px;
+    width: 54px;
+    height: 54px;
+  }
+  body.light .hero-marks .hm { filter: drop-shadow(0 8px 16px rgba(14, 42, 35, .22)); }
+}
+
+@keyframes hmFloat {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-9px) rotate(3deg); }
+}
+
+@keyframes marksIn { to { opacity: 1; } }
+
+/* 矮屏（iPhone SE 等 667 高）收紧一点，避免内容顶到商标 */
+@media (max-width: 760px) and (max-height: 700px) {
+  .hero-marks { bottom: 40px; height: 190px; }
+  .hero-marks .hm-q { width: 52px; height: 52px; right: 16px; bottom: 6px; }
+  .hero-marks .hm-w { width: 42px; height: 42px; right: 74px; bottom: 66px; }
+}
+
+@media (max-width: 360px) {
+  .hero-marks .hm-q { width: 52px; height: 52px; right: 14px; }
+  .hero-marks .hm-w { width: 42px; height: 42px; right: 76px; bottom: 70px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-marks .hm { animation: none; }
 }

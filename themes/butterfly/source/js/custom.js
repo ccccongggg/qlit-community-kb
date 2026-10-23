@@ -182,9 +182,11 @@
   /* ---------- 5. 首屏物理商标（仅首页存在 #kb-hero-stage 时启用） ---------- */
   var stage = document.getElementById("kb-hero-stage");
   if (!stage) return;
-  /* 手机端不启动物理：canvas 会吃手指手势（滚不动页面），
-     两个圆也只能挤在首屏底部占掉一大块空白。样式层已同步隐藏 #phys。 */
-  if (window.matchMedia("(max-width: 760px)").matches) return;
+  /* 手机端同样跑物理（可玩性不能丢）。当年"手机滚不动页面"的根因是
+     canvas / hero 上挂了 touch-action:none 把整块手势都吃了；
+     现在改成 touchstart 里「命中球才 preventDefault」的精确拦截，
+     按在球上 = 拖球，按在别处 = 正常滚动。见下方交互段。 */
+  var isPhone = window.matchMedia("(max-width: 760px)").matches;
 
   var hero = stage;
   var cv = document.getElementById("phys");
@@ -230,7 +232,13 @@
 
   function sizes() {
     var w = hero.clientWidth;
-    return [Math.max(42, Math.min(w * 0.046, 66)), Math.max(34, Math.min(w * 0.037, 53))];
+    /* 手机屏窄，按百分比算出来的球会小到没有存在感，单独给一档。
+       两档的上/下限刻意对齐（手机 52/43 ↔ 桌面 50/40），
+       免得 760→761px 时球突然缩一圈。 */
+    if (w <= 760) {
+      return [Math.max(40, Math.min(w * 0.125, 52)), Math.max(33, Math.min(w * 0.105, 43))];
+    }
+    return [Math.max(50, Math.min(w * 0.046, 66)), Math.max(40, Math.min(w * 0.037, 53))];
   }
   function makeBodies() {
     var s = sizes();
@@ -240,9 +248,12 @@
         { key: "w", r: s[1], m: s[1] * s[1], x: W * 0.86, y: floorY - s[1], vx: 0, vy: 0 }
       ];
     }
+    /* 手机屏窄：桌面同款初速度（85px/s）在 390 宽上会一路漂到贴墙，
+       所以初速收小、起点左右分开，落地后停在中间偏右两块空地 */
+    var drop = isPhone ? 60 : 120;
     return [
-      { key: "q", r: s[0], m: s[0] * s[0], x: W * 0.64, y: -s[0] - 120, vx: 85, vy: 0 },
-      { key: "w", r: s[1], m: s[1] * s[1], x: W * 0.82, y: -s[1] - 320, vx: -65, vy: 0 }
+      { key: "q", r: s[0], m: s[0] * s[0], x: W * (isPhone ? 0.32 : 0.64), y: -s[0] - drop, vx: isPhone ? 34 : 85, vy: 0 },
+      { key: "w", r: s[1], m: s[1] * s[1], x: W * (isPhone ? 0.74 : 0.82), y: -s[1] - drop - 200, vx: isPhone ? -24 : -65, vy: 0 }
     ];
   }
   function reset() { bodies = makeBodies(); ripples.length = 0; }
@@ -305,6 +316,17 @@
   window.addEventListener("pointerup", endDrag);
   window.addEventListener("pointercancel", endDrag);
 
+  /* 触屏专用：pointerdown 的 preventDefault 拦不住页面滚动，
+     真正管用的是 touchstart（必须 passive:false）。只在这一下命中球时才拦，
+     所以「按住球 = 拖球」「按住别处 = 正常上下滑」两者不打架。 */
+  window.addEventListener("touchstart", function (e) {
+    if (e.touches.length !== 1) return;
+    var t = e.touches[0];
+    if (t.target && t.target.closest && t.target.closest("a,button")) return;
+    if (!hit(toLocal(t))) return;
+    if (e.cancelable) e.preventDefault();
+  }, { passive: false });
+
   /* ---------- 物理步进（冲量法弹性碰撞，质量 ∝ r²） ---------- */
   function ripple(x, y, r) {
     ripples.push({ x: x, y: y, r: r, t: 0 });
@@ -327,7 +349,8 @@
       if (b.y + b.r > floorY) {
         b.y = floorY - b.r;
         if (b.vy > 0) { if (b.vy > 260) ripple(b.x, floorY, b.r); b.vy = -b.vy * E; }
-        b.vx *= 0.992;
+        /* 手机上加一点地面摩擦，否则初速在窄屏上会一路滑到贴墙 */
+        b.vx *= isPhone ? 0.955 : 0.992;
         if (Math.abs(b.vy) < 42) b.vy = 0;
       }
     }
@@ -353,7 +376,13 @@
     }
   }
 
+  var marksOff = false;
   function draw() {
+    /* 物理精灵就绪就把手机端的静态兜底商标撤掉（无 JS / 图挂了才留它） */
+    if (!marksOff && spriteReady) {
+      document.body.classList.add("phys-on");
+      marksOff = true;
+    }
     ctx.clearRect(0, 0, W, H);
     // 地面线 + 投影（颜色随主题）
     ctx.strokeStyle = themeLight ? "rgba(14,42,35,.22)" : "rgba(95,227,192,.22)";
@@ -402,6 +431,15 @@
   measure();
   window.addEventListener("load", measure);
   requestAnimationFrame(frame);
+
+  /* 只读快照，供自动化验收定位球坐标（不参与任何逻辑） */
+  window.__kbPhys = {
+    bodies: function () {
+      return bodies.map(function (b) { return { key: b.key, x: b.x, y: b.y, r: b.r }; });
+    },
+    floor: function () { return floorY; },
+    dragging: function () { return !!drag; }
+  };
 })();
 
 /* ============================================================
