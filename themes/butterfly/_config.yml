@@ -1095,9 +1095,9 @@ inject:
   head:
     # ?v= 为发布版本号：每次改动 custom.css / custom.js 后必须手动 +1，
     # 否则浏览器可能继续用旧缓存（静态托管按 URL 授权，旧 403 缓存会污染样式）
-    - <link rel="stylesheet" href="/css/custom.css?v=20261023s">
+    - <link rel="stylesheet" href="/css/custom.css?v=20261023t">
   bottom:
-    - <script src="/js/custom.js?v=20261023d" defer></script>
+    - <script src="/js/custom.js?v=20261023e" defer></script>
 
 # CDN Settings
 # Don't modify the following settings unless you know how they work

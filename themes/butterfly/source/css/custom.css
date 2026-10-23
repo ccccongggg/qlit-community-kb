@@ -47,8 +47,11 @@ body {
   --c-mq-bg: #28B894;
   --c-mq-fg: #04231C;
 
-  --c-code-bg: rgba(40, 184, 148, .16);
-  --c-code-fg: #5FE3C0;
+  /* code 徽标：底色本身就是青绿，字色必须跟它拉开「明度差」而不是同色系。
+     原先绿底(#28B894 16%) + 绿字(#5FE3C0) 会糊成一片，首屏「AI」看着像没上色。
+     改为近白字 + 稍浓一点的底，让徽标变成「暗色块上的一个亮点」。 */
+  --c-code-bg: rgba(40, 184, 148, .34);
+  --c-code-fg: #EAF7F2;
 
   /* 吸顶表头必须「不透明」：半透明 + backdrop-filter 会让滚到其下方的
      动画内容（跑马灯/极光/滚动进场）透出来，表头看起来一直在闪。
@@ -637,8 +640,11 @@ body.light .stack-light { opacity: 1; }
   border-radius: 6px;
   font-size: .86em;
   font-weight: 700;
-  transition: background-color .5s ease, color .5s ease;
+  /* 细描边把徽标从首屏渐变里「切」出来，避免底色跟背景糊在一起 */
+  box-shadow: inset 0 0 0 1px rgba(95, 227, 192, .26);
+  transition: background-color .5s ease, color .5s ease, box-shadow .5s ease;
 }
+body.light .h-sub code { box-shadow: inset 0 0 0 1px rgba(18, 168, 127, .22); }
 .h-cta { margin-top: clamp(26px, 3vw, 36px); display: flex; flex-wrap: wrap; gap: 14px; }
 .btn {
   display: inline-flex;

@@ -134,6 +134,51 @@
     }
   }
 
+  /* ---------- 4.5 跑马灯补足（首屏底部流动带，防止循环时露出空档） ----------
+     原理：CSS 用 translateX(-50%) 做无缝循环，前提是「一份」内容宽度 ≥ 视口宽。
+     模板只输出 2 份，3 句话一份约 846px，在 1045px 视口里滚到后半段必然露空档。
+     这里按视口宽把「一份」重复到够宽，再把整份复制一遍，保证 -50% 仍首尾相接。
+     同时按实际宽度换算 animation-duration，让不同屏宽下的滚动线速度保持一致。
+     位置注意：必须放在 §5 之前——§5 有 `return`（非首页 / 手机端都会提前退出整个
+     IIFE），写在它后面的话手机端永远不会执行。 */
+  var SPEED = 36; // px/s
+  var mq = document.querySelector(".c-marquee");
+  var mqTrack = mq ? mq.querySelector(".track") : null;
+  if (mqTrack && mqTrack.children.length > 1) {
+    var mqKids = [].slice.call(mqTrack.children);
+    var oneLen = Math.floor(mqKids.length / 2) || mqKids.length; // 一份的 span 数
+    var mqOne = mqKids.slice(0, oneLen);
+    var mqBaseW = 0;
+
+    var mqMeasure = function () {
+      mqTrack.textContent = "";
+      for (var a = 0; a < mqOne.length; a++) mqTrack.appendChild(mqOne[a]);
+      mqBaseW = mqTrack.scrollWidth || 1;
+    };
+
+    var mqBuild = function () {
+      var need = Math.max(window.innerWidth || 1024, 760);
+      var copies = Math.ceil(need / mqBaseW);
+      if (copies < 1) copies = 1;
+      mqTrack.textContent = "";
+      // 输出 copies × 2 份：前一半和后一半完全相同，-50% 位移才无缝
+      for (var c = 0; c < copies * 2; c++) {
+        for (var i = 0; i < mqOne.length; i++) mqTrack.appendChild(mqOne[i].cloneNode(true));
+      }
+      var halfW = mqTrack.scrollWidth / 2;
+      mqTrack.style.animationDuration = Math.max(6, halfW / SPEED).toFixed(2) + "s";
+    };
+
+    mqMeasure();
+    mqBuild();
+
+    var mqTimer;
+    window.addEventListener("resize", function () {
+      clearTimeout(mqTimer);
+      mqTimer = setTimeout(function () { mqMeasure(); mqBuild(); }, 180);
+    });
+  }
+
   /* ---------- 5. 首屏物理商标（仅首页存在 #kb-hero-stage 时启用） ---------- */
   var stage = document.getElementById("kb-hero-stage");
   if (!stage) return;
