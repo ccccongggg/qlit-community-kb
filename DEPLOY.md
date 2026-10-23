@@ -147,5 +147,9 @@ EdgeOne 默认就是 https，正常情况不会遇到；如果是用 http 的自
 **图片传上去不显示**
 → 后台图片默认存 `source/img/uploads/`，构建后路径是 `/img/uploads/xxx`，两者都在 `config.yml` 里定义，别只改一个。
 
+**站点标题预览 / 分享卡片里的图片地址不对**
+→ 换域名后要改两处：根目录 `_config.yml` 的 `url:`、`source/admin/config.yml` 的 `site_url:`，
+改成新的正式域名后 push 一次（影响 og:image、sitemap 的绝对地址）。
+
 **中文界面没生效**
 → `config.yml` 的 `locale: zh_Hans`，Sveltia 若某版本不认会回退英文，不影响使用。
