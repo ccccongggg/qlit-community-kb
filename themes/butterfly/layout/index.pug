@@ -1,0 +1,72 @@
+extends includes/layout.pug
+
+block hero
+  //- ============ 首屏 hero：大标题 + 物理商标 + 跑马灯地面 ============
+  - var HOME = site.data.home || {}
+  - var MQ = (HOME.marquee && HOME.marquee.length) ? HOME.marquee : ['知学 · 知道 · 知善 · 知美 ·']
+  section#kb-hero-stage
+    //- 黑夜装饰栈
+    .stack.stack-dark
+      .bg-fill
+      .bg-layer.grid
+      .bg-layer.dots
+      .aur.aur1
+      .aur.aur2
+      .aur.aur3
+    //- 白天装饰栈
+    .stack.stack-light
+      .bg-fill
+      .bg-layer.dots
+      .aur.aur1
+      .aur.aur2
+
+    //- 物理层：齐鲁理工校徽奖章 + WorkBuddy 圆，带重力、可拖拽、可碰撞
+    canvas#phys
+
+    //- 主题装饰：代码窗 + 书简
+    .t.t-code
+      .bar
+        i
+        i
+        i
+      .code
+        b &gt;
+        | hexo generate
+        br
+        b &gt;
+        | 让 AI 帮我做首页
+        span.cur
+    .t.t-slip
+      span.band
+      i
+      i
+      i
+      i
+
+    .hero-inner
+      .kicker= HOME.kicker || '齐鲁理工 · 校园社群'
+      h1.h-title
+        span.out= HOME.title_line1 || '社群'
+        span.fill= HOME.title_line2 || '知识库'
+      p.h-sub!= HOME.sub_html || '知学 · 知道 · 知善 · 知美'
+      .h-cta
+        a.btn.btn-solid(href=url_for(HOME.cta1_link || '/kb/'))= HOME.cta1_text || '从知识库开始 →'
+        a.btn.btn-line(href=url_for(HOME.cta2_link || '/people/'))= HOME.cta2_text || '我是新生'
+
+    .phys-hint
+      i
+      | #{HOME.hint || '这两个商标是有重力的 —— 按住拖动它们，甩出去让两者撞在一起'}
+
+    //- 跑马灯（= 物理地面）。内容输出两遍，配合 CSS 的 -50% 位移实现无缝滚动
+    .c-marquee
+      .track
+        each mq in MQ.concat(MQ)
+          span= (mq && mq.text) ? mq.text : mq
+
+block content
+  include ./includes/mixins/indexPostUI.pug
+  .kb-sec-head
+    h2 最新动态
+    span.line
+    a.more(href=url_for('/archives/')) 全部归档 →
+  +indexPostUI

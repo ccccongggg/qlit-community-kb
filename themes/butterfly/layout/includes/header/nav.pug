@@ -1,0 +1,34 @@
+nav#nav
+  //- 刊头：徽标 + 站名（保留 #blog-info 容器，Butterfly main.js 依赖它）
+  #blog-info
+    a#kb-brand.nav-site-title(href=url_for('/'))
+      span.kb-mark 知
+      span.kb-name 社群知识库
+      i.kb-rule
+      span.kb-brand__sub 齐鲁理工 · 校园社群
+
+  //- 目录：四大板块入口
+  #menus
+    - const kbEntries = [['01', '知识库', '/kb/'], ['02', '问题库', '/problems/'], ['03', '活动库', '/activities/'], ['04', '社群大佬', '/people/']]
+    each entry, i in kbEntries
+      a.kb-link(href=url_for(entry[2]))
+        span.kb-num= entry[0]
+        b= entry[1]
+      if i < kbEntries.length - 1
+        i.kb-dot
+
+    //- 昼夜切换
+    button#themeToggle(type='button' aria-label='切换白天 / 黑夜主题' title='切换白天 / 黑夜主题')
+      svg.ic-moon(viewBox='0 0 24 24' fill='currentColor')
+        path(d='M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z')
+      svg.ic-sun(viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round')
+        circle(cx='12' cy='12' r='4.2')
+        path(d='M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5')
+      span.tt-txt
+        span.tt-day 白天
+        span.tt-night 黑夜
+
+  //- 保留 Butterfly 移动端汉堡钩子（CSS 中桌面隐藏、小屏也强制展开目录）
+  #toggle-menu
+    span.site-page
+      i.fas.fa-bars.fa-fw

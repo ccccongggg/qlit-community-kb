@@ -1,0 +1,31 @@
+extends includes/layout.pug
+
+block content
+  #article-container.container
+    .pd
+      .pd-head
+        img.pd-avatar(src=page.avatar, alt=page.title)
+        .pd-meta
+          h1.pd-name= page.title
+          .pd-role= page.role
+          .pd-tags
+            each t in page.ptags
+              span.people-tag= t
+      p.pd-intro= page.intro
+      .pd-section
+        h2.pd-h2 能力分布
+        each s in page.skills
+          .pd-skill
+            .pd-skill__top
+              span= s.name
+              span= s.level + '%'
+            .pd-bar
+              .pd-bar__fill(style=`width:${s.level}%`)
+      .pd-section
+        h2.pd-h2 做过的事
+        each pr in page.projects
+          .pd-proj
+            .pd-proj__name= pr.name
+            .pd-proj__desc= pr.desc
+      .pd-back
+        a(href="/people/") ← 返回社群大佬
