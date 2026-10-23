@@ -34,3 +34,4 @@ top_img: false
 <div class="kb-chips">
   <a class="tagchip tagchip-zx" href="/categories/问题库/">全部问题</a>
 </div>
+<p class="kb-empty">公开案例还在陆续整理。你投来的第一个问题，会成为这里的第一条。</p>

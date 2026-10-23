@@ -895,6 +895,13 @@ body.light .act-badge--soon { color: #B3122A; }
   display: block;
   transition: transform .45s var(--ease-spring);
 }
+/* .article img 的 (0,1,1) 圆角盖掉了上面的 50%，
+   头像被裁成圆角矩形、四角露出卡片底色，看着像「圆外套方框」 */
+.people-card .people-card__avatar {
+  border-radius: 50%;
+  border-color: rgba(95, 227, 192, .38);
+}
+body.light .people-card .people-card__avatar { border-color: rgba(18, 168, 127, .42); }
 .people-card:hover .people-card__avatar { transform: rotate(-6deg) scale(1.06); }
 .people-card__name { font-family: var(--font-title); font-weight: 500; font-size: 19px; }
 .people-card__role { color: var(--c-link); font-size: 13px; margin: 4px 0 10px; }
@@ -1809,3 +1816,21 @@ body.light #kb-mask { background: rgba(14, 42, 35, .34); }
   .pf-body span { font-size: 12.5px; line-height: 1.65; }
 }
 
+
+/* 独立布局（社群大佬）没有 .page-title，补一个和其它板块一致的栏目标签 */
+.kb-kicker {
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .32em;
+  text-indent: .32em;
+  color: var(--c-a1);
+  margin: 2px 0 10px;
+}
+
+@media (max-width: 760px) {
+  /* 单列下三卡不再并排，等高对齐失去意义，
+     margin-top:auto 会在卡片底部撑出一大块空白，改成紧跟描述 */
+  .kb-card__go { margin-top: 12px; padding-top: 0; }
+  .kb-card { padding: 22px 20px; }
+}
