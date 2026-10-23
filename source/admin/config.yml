@@ -6,7 +6,7 @@
 
 backend:
   name: github
-  repo: cccongggg/qlit-community-kb
+  repo: ccccongggg/qlit-community-kb
   branch: main
 
   # 【登录方式】

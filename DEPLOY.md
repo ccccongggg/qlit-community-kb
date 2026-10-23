@@ -4,7 +4,7 @@
 架构：**GitHub 仓库（唯一内容源）→ EdgeOne Pages 自动构建 → 自定义域名**
 
 ```
-GitHub: cccongggg/qlit-community-kb
+GitHub: ccccongggg/qlit-community-kb
    │  每次 push（含后台编辑产生的提交）自动触发
    ▼
 EdgeOne Pages 构建：npm install && npm run build  →  public/
