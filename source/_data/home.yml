@@ -21,3 +21,44 @@ marquee:
   - text: 知学 · 知道 · 知善 · 知美 ·
   - text: 把好东西攒起来一起变强 ·
   - text: QILU INSTITUTE OF TECHNOLOGY ·
+
+# 首页「从这里开始」板块导览（4 张卡）
+sections:
+  - title: 知识库
+    meta: MEMBER NOTES
+    desc: 成员踩坑记 · 负责人复盘 · AI 实战笔记
+    href: /kb/
+    icon: book
+  - title: 问题库
+    meta: PROBLEM LOG
+    desc: 真痛点丢进来，一起用 AI 解决
+    href: /problems/
+    icon: compass
+  - title: 活动库
+    meta: EVENTS
+    desc: 集训、分享会、市集的排期与留档
+    href: /activities/
+    icon: calendar
+  - title: 社群大佬
+    meta: PEOPLE
+    desc: 每个方向的扛把子，看该找谁
+    href: /people/
+    icon: users
+
+# 首页「新人三步」
+onboard:
+  - no: "01"
+    title: 先逛逛知识库
+    desc: 不用从头看。挑一个你正卡住的方向，看别人怎么趟过去的。
+    href: /kb/
+    cta: 去知识库
+  - no: "02"
+    title: 有问题就丢问题库
+    desc: 不会写代码也能投。用大白话讲清痛点，我们帮你走完闭环。
+    href: /problems/
+    cta: 投一个痛点
+  - no: "03"
+    title: 来线下活动见人
+    desc: 集训、分享会、摆摊。认识人比看完资料管用得多。
+    href: /activities/
+    cta: 看活动排期

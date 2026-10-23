@@ -1,8 +1,21 @@
 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="社群知识库">
-  <rect x="1" y="1" width="30" height="30" rx="8" fill="#C8102E"/>
-  <path d="M11 10 Q16 3 21 10 Q18 6.5 16 6.5 Q14 6.5 11 10 Z" fill="#FFFFFF"/>
-  <circle cx="16" cy="17" r="8.5" fill="#FFFFFF"/>
-  <circle cx="13.2" cy="15.8" r="1.5" fill="#C8102E"/>
-  <circle cx="18.8" cy="15.8" r="1.5" fill="#C8102E"/>
-  <path d="M16 18.6 L18.6 20.4 L16 22.2 L13.4 20.4 Z" fill="#F09B3E"/>
+  <defs>
+    <radialGradient id="kbFv" cx="34%" cy="26%" r="82%">
+      <stop offset="0" stop-color="#22314D"/>
+      <stop offset="0.55" stop-color="#121C2C"/>
+      <stop offset="1" stop-color="#080D16"/>
+    </radialGradient>
+    <radialGradient id="kbFvDot" cx="35%" cy="32%" r="72%">
+      <stop offset="0" stop-color="#FF4A52"/>
+      <stop offset="0.58" stop-color="#D6000F"/>
+      <stop offset="1" stop-color="#A80009"/>
+    </radialGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="url(#kbFv)"/>
+  <rect x="1.1" y="1.1" width="29.8" height="29.8" rx="8" fill="none" stroke="#5FE3C0" stroke-opacity="0.30" stroke-width="1.1"/>
+  <rect x="4.2" y="4.2" width="23.6" height="23.6" rx="5.6" fill="none" stroke="#F3F8F6" stroke-opacity="0.055" stroke-width="0.8"/>
+  <text x="16" y="16.6" font-family="'Songti SC','STSong','SimSun','Noto Serif SC',serif"
+        font-size="16" font-weight="700" fill="#F3F8F6" text-anchor="middle"
+        dominant-baseline="central">知</text>
+  <circle cx="26.1" cy="5.9" r="2.6" fill="url(#kbFvDot)"/>
 </svg>

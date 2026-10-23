@@ -90,7 +90,7 @@
 
   /* ---------- 4. 滚动进场（rAF 节流的手动检测，无头/真实浏览器一致） ---------- */
   var targets = document.querySelectorAll(
-    ".recent-post-item, .card-widget, .kb-card, .act-card, .people-card, .pf-step"
+    ".recent-post-item, .card-widget, .kb-card, .act-card, .people-card, .pf-step, .kb-guide__card, .kb-onb"
   );
   if (targets.length) {
     if (reduceMotion) {

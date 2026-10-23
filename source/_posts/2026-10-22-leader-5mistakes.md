@@ -6,6 +6,7 @@ categories:
   - 负责人经验
 tags: [知善, 协作]
 cover: /img/cover-kb-leader.svg
+cover_thumb: /img/thumb-kb-leader.svg
 ---
 
 作为咱们 WorkBuddy 社群的第一任负责人，前三个月我基本在"交学费"。把踩过的坑记下来，给后面的负责人避避雷。

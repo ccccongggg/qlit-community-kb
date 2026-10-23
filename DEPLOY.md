@@ -175,10 +175,59 @@ npx hexo generate
 
 `themes/butterfly/_config.yml` 的 `inject` 段里：
 ```yaml
-- <link rel="stylesheet" href="/css/custom.css?v=20261023i">
-- <script src="/js/custom.js?v=20261023c" defer></script>
+- <link rel="stylesheet" href="/css/custom.css?v=20261023s">
+- <script src="/js/custom.js?v=20261023d" defer></script>
 ```
 静态托管会缓存旧文件，不加版本号访客可能继续用旧样式。改 CSS 就升 css 的号，改 JS 就升 js 的号。
+
+**3. 图片也要版本号（第二条版本线，跟 CSS/JS 分开）**
+
+根目录 `_config.yml` 的 `kb_asset_ver: '20261023c'`，配合 `scripts/kb-asset.js` 注册的 `kbimg()` helper：
+
+```pug
+img.post-bg(src=kbimg(postCover))
+img.people-card__avatar(src=kbimg(p.avatar))
+```
+
+规则：
+- **换了图片内容（同名覆盖）→ 必须升 `kb_asset_ver`**。否则浏览器按 URL 缓存，访客看到的还是旧图。
+- 全新文件名（如新增 `thumb-xxx.svg`）严格来说不用升，但一起升最省心。
+- 新加图片引用时，pug 里一律写 `kbimg(path)` 而不是 `url_for(path)`；`scripts/acts-tag.js` 那种拼字符串的地方按同样规则手拼 `?v=`。
+
+反面教材：曾把活动封面的 emoji 换成 SVG，线上文件字节已更新，但用户截图里仍是旧 emoji —— 就是这条没做，浏览器一直给缓存。加了 helper 之后彻底解决。
+
+## 首页结构（改版后）
+
+`themes/butterfly/layout/index.pug` 的 `block content` 现在是四段：
+
+1. **从这里开始** — 4 张导览卡，数据在 `source/_data/home.yml` 的 `sections:`
+2. **新人三步** — 3 张步骤卡，数据在 `home.yml` 的 `onboard:`
+3. **最新动态** — Butterfly 原生文章列表，被 CSS 改造成「58px 方形缩略图 + 右侧文字」的紧凑索引
+4. 右侧 `#aside-content` 在首页被 `display:none` 隐藏
+
+紧凑索引用的封面是 **400×400 纯图标方形图**（`source/img/thumb-*.svg`），在每篇文章的 front-matter 里用 `cover_thumb` 指定：
+
+```yaml
+cover: /img/cover-kb-member.svg        # 详情页/侧栏用的 16:9 大图
+cover_thumb: /img/thumb-kb-member.svg  # 首页列表用的方图（可选，缺省回退 cover）
+```
+
+**别把 16:9 横图塞进 58px 方格**：`object-fit:cover` 会裁出中间一块，横图左侧的标题文字必然露半截残影。要么补一张方图，要么不给 `cover_thumb`（走 `no-cover` 无图分支）。
+
+## 站徽 / favicon
+
+四个地方是同一个视觉（深墨玉璧 + 青绿细环 + 衬线「知」+ 环上朱砂点）：
+
+| 文件 | 用途 | 尺寸 |
+|---|---|---|
+| CSS `.kb-mark` | 顶栏左上角（div 画的，不是图片） | 28px |
+| `source/img/favicon.svg` | 浏览器标签页 | 32×32 |
+| `source/img/avatar.svg` | 侧栏头像 / og:image / twitter:image | 200×200 |
+| `source/img/logo-mark.svg` | 备用方标 | 48×48 |
+
+改站徽要**四处一起改**，否则顶栏和标签页会露出两代风格。
+
+> 已知项：`og:image` 指向 SVG，微信 / Twitter 抓取时普遍不认 SVG，分享卡片可能无图。要修得另出一张 PNG 并改 `themes/butterfly/_config.yml` 的 `og_image` / `avatar.img`。
 
 ## 双主题说明
 

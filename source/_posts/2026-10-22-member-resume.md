@@ -6,6 +6,7 @@ categories:
   - 成员经验
 tags: [知学, 效率]
 cover: /img/cover-kb-member.svg
+cover_thumb: /img/thumb-kb-member.svg
 ---
 
 上周舍友小杨要投实习，简历写得很"朴实"——三段经历全是"负责 xxx"。我拉着他一起用 WorkBuddy 过了一遍，半小时把简历从"看不懂"改成"想面试"。

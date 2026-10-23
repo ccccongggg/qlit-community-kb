@@ -313,19 +313,56 @@ h1, h2, h3, h4, h5, h6 { color: var(--c-ink); }
   min-width: 0;
 }
 .kb-mark {
-  width: 27px; height: 27px;
-  border-radius: 8px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
   flex: none;
   display: grid;
   place-items: center;
-  background: var(--c-warm);
-  color: #FFF;
-  font-size: 15px;
-  font-weight: 900;
+  position: relative;
+  /* 深墨玉璧 + 双环 + 衬线「知」+ 环上一枚朱砂点：
+     比原先「红底白字方块」更像一枚印章，小尺寸下也不糊。
+     内环用 second background layer 画（inset box-shadow 做不出空心环）*/
+  background:
+    radial-gradient(circle,
+      rgba(243, 248, 246, 0) 0 76%,
+      rgba(243, 248, 246, .055) 76% 78%,
+      rgba(243, 248, 246, 0) 78%),
+    radial-gradient(circle at 34% 26%, #22314D 0%, #121C2C 52%, #080D16 100%);
+  color: #F3F8F6;
+  font-family: "Songti SC", "STSong", "SimSun", "Noto Serif SC", serif;
+  font-size: 14px;
+  font-weight: 700;
   line-height: 1;
-  box-shadow: 3px 3px 0 var(--c-shadow);
-  transition: background-color .5s ease, box-shadow .5s ease;
+  letter-spacing: 0;
+  text-indent: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+  box-shadow: inset 0 0 0 1px rgba(95, 227, 192, .34), 0 2px 7px rgba(0, 0, 0, .38);
+  transition: background .5s ease, box-shadow .5s ease, transform .5s var(--ease-spring);
 }
+/* 朱砂点：骑在圆环右上 45° 的环线上，用径向渐变柔化边缘，不画硬描边圈 */
+.kb-mark::after {
+  content: "";
+  position: absolute;
+  top: 1.9px;
+  right: 1.9px;
+  width: 4.5px;
+  height: 4.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #FF6A71 0%, #D6000F 62%, #A80009 100%);
+  box-shadow: 0 0 3px rgba(214, 0, 15, .45);
+}
+body.light .kb-mark {
+  background:
+    radial-gradient(circle,
+      rgba(14, 42, 35, 0) 0 76%,
+      rgba(14, 42, 35, .055) 76% 78%,
+      rgba(14, 42, 35, 0) 78%),
+    radial-gradient(circle at 34% 26%, #FFFFFF 0%, #E9F1ED 58%, #DCE8E2 100%);
+  color: #0E2A23;
+  text-shadow: none;
+  box-shadow: inset 0 0 0 1px rgba(18, 168, 127, .30), 0 2px 6px rgba(14, 42, 35, .14);
+}
+body.light .kb-mark::after { box-shadow: 0 0 0 1.2px rgba(234, 241, 238, .9); }
 .kb-name {
   font-size: 15.5px;
   font-weight: 900;
@@ -1833,4 +1870,254 @@ body.light #kb-mask { background: rgba(14, 42, 35, .34); }
      margin-top:auto 会在卡片底部撑出一大块空白，改成紧跟描述 */
   .kb-card__go { margin-top: 12px; padding-top: 0; }
   .kb-card { padding: 22px 20px; }
+}
+
+/* ============================================================
+   V6 · 首页改版
+   原来首页只有一条「大封面文章列表」，访客第一眼看不到这站有什么。
+   改为：板块导览（4 卡）→ 新人三步 → 紧凑动态（横向小封面）
+   ============================================================ */
+
+/* ---------- A. 板块导览 ---------- */
+.kb-guide {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 4px 0 10px;
+}
+.kb-guide__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 22px 20px 18px;
+  border-radius: 18px;
+  background: var(--c-card-bg);
+  border: 1px solid var(--c-card-border);
+  text-decoration: none;
+  color: var(--c-card-fg);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .16);
+  transition: transform .45s var(--ease-spring), border-color .35s, box-shadow .35s, background .5s;
+}
+.kb-guide__card > * { position: relative; z-index: 1; }
+/* 悬停时从左上扫进来的柔光，给卡片一点"被点亮"的反应 */
+.kb-guide__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(130% 90% at 10% 0%, rgba(40, 184, 148, .20), transparent 62%);
+  opacity: 0;
+  transition: opacity .45s ease;
+  pointer-events: none;
+}
+.kb-guide__card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(95, 227, 192, .55);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, .32);
+}
+.kb-guide__card:hover::before { opacity: 1; }
+body.light .kb-guide__card:hover { box-shadow: 0 16px 30px rgba(14, 42, 35, .13); }
+
+.kb-guide__ico {
+  width: 42px; height: 42px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  background: rgba(40, 184, 148, .10);
+  border: 1px solid rgba(95, 227, 192, .22);
+  color: var(--c-a1);
+  transition: transform .5s var(--ease-spring), background .35s, border-color .35s;
+}
+.kb-guide__card:hover .kb-guide__ico {
+  transform: translateY(-2px) rotate(-7deg);
+  background: rgba(40, 184, 148, .18);
+  border-color: rgba(95, 227, 192, .45);
+}
+.kb-guide__meta {
+  font-size: 10px;
+  letter-spacing: .2em;
+  font-weight: 700;
+  color: var(--c-a1);
+  opacity: .75;
+}
+.kb-guide__t {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--c-ink);
+  letter-spacing: .02em;
+}
+.kb-guide__d { font-size: 12.5px; line-height: 1.65; color: var(--c-muted); text-wrap: balance; }
+.kb-guide__go {
+  margin-top: auto;
+  padding-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--c-link);
+}
+.kb-guide__go .kb-i { transition: transform .35s var(--ease-spring); }
+.kb-guide__card:hover .kb-guide__go .kb-i { transform: translateX(4px); }
+
+/* ---------- B. 新人三步 ---------- */
+.kb-onboard {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 4px 0 10px;
+}
+.kb-onb {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 22px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--c-card-border);
+  background: var(--c-card-bg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .16);
+  overflow: hidden;
+  transition: transform .45s var(--ease-spring), border-color .35s, box-shadow .35s;
+}
+.kb-onb:hover {
+  transform: translateY(-5px);
+  border-color: rgba(95, 227, 192, .5);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, .3);
+}
+body.light .kb-onb:hover { box-shadow: 0 16px 30px rgba(14, 42, 35, .13); }
+/* 描边大数字：比实心色块轻，hover 时描边点亮 */
+.kb-onb__no {
+  font-family: var(--font-title);
+  font-size: 46px;
+  font-weight: 700;
+  line-height: .92;
+  color: transparent;
+  -webkit-text-stroke: 1.2px rgba(95, 227, 192, .45);
+  transition: -webkit-text-stroke-color .4s ease, transform .45s var(--ease-spring);
+}
+body.light .kb-onb__no { -webkit-text-stroke-color: rgba(11, 102, 82, .40); }
+.kb-onb:hover .kb-onb__no {
+  -webkit-text-stroke-color: rgba(95, 227, 192, .95);
+  transform: translateX(3px);
+}
+body.light .kb-onb:hover .kb-onb__no { -webkit-text-stroke-color: rgba(11, 102, 82, .95); }
+.kb-onb__t {
+  font-family: var(--font-title);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--c-ink);
+}
+.kb-onb__d { font-size: 12.5px; line-height: 1.7; color: var(--c-muted); margin: 0; text-wrap: balance; }
+.kb-onb__cta {
+  margin-top: auto;
+  padding-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--c-link);
+  text-decoration: none;
+  align-self: flex-start;
+}
+.kb-onb__cta .kb-i { transition: transform .35s var(--ease-spring); }
+.kb-onb:hover .kb-onb__cta .kb-i { transform: translateX(4px); }
+
+/* ---------- C. 最新动态：紧凑索引式 ---------- */
+/* 之前每条都是「16:9 大封面 + 正文」竖排，一屏只放得下一条，封面面积远大于信息量。
+   封面的设计是「左侧大标题 + 右侧图标」，压进任何窄栏都会露出半截标题，
+   所以这里把封面缩成 58px 的小方块只当视觉锚点，标题交给右边的正文。 */
+#body-wrap.kb-home #recent-posts .recent-post-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 18px 20px;
+  overflow: visible;
+}
+#body-wrap.kb-home #recent-posts .post_cover {
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  margin: 0;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .28);
+}
+#body-wrap.kb-home #recent-posts .post_cover > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+#body-wrap.kb-home #recent-posts .post_cover .post-bg {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 0;
+  transition: transform .6s var(--ease-spring);
+}
+#body-wrap.kb-home #recent-posts .recent-post-item:hover .post_cover .post-bg {
+  transform: scale(1.08);
+}
+#body-wrap.kb-home #recent-posts .recent-post-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+}
+#body-wrap.kb-home #recent-posts .recent-post-info .article-title {
+  font-size: 16.5px;
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+#body-wrap.kb-home #recent-posts .recent-post-info .content {
+  font-size: 12.5px;
+  line-height: 1.7;
+  margin-top: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--c-muted);
+}
+/* 无封面的条目：不要左侧空位 */
+#body-wrap.kb-home #recent-posts .recent-post-item.no-cover,
+#body-wrap.kb-home #recent-posts .recent-post-item:has(.no-cover) {
+  padding-left: 20px;
+}
+
+@media (max-width: 760px) {
+  .kb-guide,
+  .kb-onboard { grid-template-columns: 1fr; gap: 12px; }
+  .kb-guide__card { padding: 18px 18px 16px; }
+  .kb-guide__card:hover,
+  .kb-onb:hover { transform: none; }
+  .kb-onb { padding: 20px 18px 18px; }
+  .kb-onb__no { font-size: 38px; }
+  #body-wrap.kb-home #recent-posts .recent-post-item { gap: 13px; padding: 14px 15px; }
+  #body-wrap.kb-home #recent-posts .post_cover {
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+  }
+  #body-wrap.kb-home #recent-posts .recent-post-info .article-title { font-size: 14.5px; }
+  #body-wrap.kb-home #recent-posts .recent-post-info .content { -webkit-line-clamp: 1; font-size: 12px; }
+
+  /* 移动端分类胶囊会把条目撑成两行，只留第一个，层级信息交给标题 */
+  #body-wrap.kb-home #recent-posts .article-meta a.tagchip ~ a.tagchip,
+  #body-wrap.kb-home #recent-posts .article-meta i.fas.fa-inbox ~ i.fas.fa-inbox,
+  #body-wrap.kb-home #recent-posts .article-meta i.article-meta-link { display: none; }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-guide__card:hover,
+  .kb-onb:hover { transform: none; }
+  .kb-guide__card:hover .kb-guide__ico,
+  .kb-onb:hover .kb-onb__no { transform: none; }
 }

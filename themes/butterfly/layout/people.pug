@@ -10,7 +10,7 @@ block content
       .people-grid
         each p in ((site.data.people && site.data.people.list) || [])
           a.people-card(href=`/people/${p.slug}/`)
-            img.people-card__avatar(src=p.avatar, alt=p.name)
+            img.people-card__avatar(src=kbimg(p.avatar), alt=p.name)
             .people-card__name= p.name
             .people-card__role= p.role
             .people-card__tags

@@ -7,6 +7,7 @@ categories:
   - 设计
 tags: [知美, 设计]
 cover: /img/cover-kb-design.svg
+cover_thumb: /img/thumb-kb-design.svg
 ---
 
 以前做海报要开 PS 抠半天图，现在用 WorkBuddy 的生图 + 排版，半小时出三版。

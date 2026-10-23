@@ -5,6 +5,7 @@ categories:
   - 问题库
 tags: [知学, 痛点]
 cover: /img/cover-problem.svg
+cover_thumb: /img/thumb-problem.svg
 ---
 
 ## 痛点（来自 @小王）

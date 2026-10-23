@@ -65,7 +65,44 @@ block hero
 
 block content
   include ./includes/mixins/indexPostUI.pug
-  .kb-sec-head
+  - var HC = site.data.home || {}
+  - var SECTIONS = (HC.sections && HC.sections.length) ? HC.sections : []
+  - var ONBOARD = (HC.onboard && HC.onboard.length) ? HC.onboard : []
+
+  //- ============ A. 板块导览： newcomer 第一眼要知道这站有什么 ============
+  if SECTIONS.length
+    .kb-sec-head
+      h2 从这里开始
+      span.line
+    nav.kb-guide
+      each s in SECTIONS
+        a.kb-guide__card(href=url_for(s.href))
+          span.kb-guide__ico
+            != kbicon(s.icon || 'book', 21)
+          span.kb-guide__meta= s.meta || ''
+          strong.kb-guide__t= s.title
+          span.kb-guide__d= s.desc
+          span.kb-guide__go
+            | 进入
+            != kbicon('arrow', 14)
+
+  //- ============ B. 新人三步：把「不知道该干嘛」变成一条路径 ============
+  if ONBOARD.length
+    .kb-sec-head
+      h2 新人三步
+      span.line
+    .kb-onboard
+      each st, i in ONBOARD
+        .kb-onb
+          span.kb-onb__no= st.no || ('0' + (i + 1))
+          strong.kb-onb__t= st.title
+          p.kb-onb__d= st.desc
+          a.kb-onb__cta(href=url_for(st.href))
+            = st.cta || '去看看'
+            != kbicon('arrow', 14)
+
+  //- ============ C. 最新动态：紧凑横排，封面只做提示 ============
+  #kb-feed.kb-sec-head
     h2 最新动态
     span.line
     a.more(href=url_for('/archives/')) 全部归档 →

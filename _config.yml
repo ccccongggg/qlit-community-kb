@@ -9,6 +9,9 @@ description: '齐鲁理工学院 WorkBuddy 校园社群知识库 —— 知学 �
 keywords: 齐鲁理工学院, WorkBuddy, 校园社群, 知识库, 齐鲁理工
 author: 齐鲁理工 WorkBuddy 社群
 language: zh-CN
+# 图片资源版本：改了 source/img 下的图（含封面/头像/活动图）就把这里 +1，
+# 全站引用会带 ?v= 参数，避免访客继续用浏览器缓存的旧图
+kb_asset_ver: '20261023c'
 timezone: ''
 
 # URL

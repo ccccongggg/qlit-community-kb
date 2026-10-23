@@ -7,6 +7,7 @@ categories:
   - 编程
 tags: [知学, 编程]
 cover: /img/cover-kb-coding.svg
+cover_thumb: /img/thumb-kb-coding.svg
 ---
 
 我高中是文科，大学才碰代码。但用 WorkBuddy，我半小时做了一个能查"今天有几节课"的小网页。

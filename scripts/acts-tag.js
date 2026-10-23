@@ -21,9 +21,13 @@ function esc(s) {
 }
 
 function card(item, isSoon) {
-  const cover = esc(item.cover || "");
+  // 封面带 ?v= 版本号，换图后访客不会继续看到缓存的旧图
+  const cover = item.cover
+    ? String(item.cover) + (String(item.cover).indexOf("?") > -1 ? "&" : "?") + "v=" + (hexo.config.kb_asset_ver || "")
+    : "";
+  const coverEsc = esc(cover);
   const img = cover
-    ? '<div class="act-card__media" style="background-image:url(' + cover + ')"></div>'
+    ? '<div class="act-card__media" style="background-image:url(' + coverEsc + ')"></div>'
     : "";
   const badge = item.badge
     ? '<span class="act-badge' +
