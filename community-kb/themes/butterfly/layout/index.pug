@@ -1,0 +1,151 @@
+extends includes/layout.pug
+
+block hero
+  //- ============ 首屏 hero：大标题 + 物理商标 + 跑马灯地面 ============
+  - var HOME = site.data.home || {}
+  - var MQ = (HOME.marquee && HOME.marquee.length) ? HOME.marquee : ['知学 · 知道 · 知善 · 知美 ·']
+  section#kb-hero-stage
+    //- 黑夜装饰栈
+    .stack.stack-dark
+      .bg-fill
+      .bg-layer.grid
+      .bg-layer.dots
+      .aur.aur1
+      .aur.aur2
+      .aur.aur3
+    //- 白天装饰栈
+    .stack.stack-light
+      .bg-fill
+      .bg-layer.dots
+      .aur.aur1
+      .aur.aur2
+
+    //- 物理层：齐鲁理工校徽奖章 + WorkBuddy 圆，带重力、可拖拽、可碰撞
+    canvas#phys(data-qlit=kbimg('/img/qlit-badge.png') data-workbuddy=kbimg('/img/wb-logo.svg') aria-hidden='true')
+
+    //- 主题装饰：代码窗 + 书简
+    .t.t-code
+      .bar
+        i
+        i
+        i
+      .code
+        b &gt;
+        | 一个问题，一份经验
+        br
+        b &gt;
+        | 一起动手，把想法做出来
+        span.cur
+    .t.t-slip
+      span.band
+      i
+      i
+      i
+      i
+
+    .hero-inner
+      .kicker= HOME.kicker || '齐鲁理工 · 校园社群'
+      h1.h-title
+        span.out= HOME.title_line1 || '社群'
+        span.fill= HOME.title_line2 || '知识库'
+      p.h-sub!= HOME.sub_html || '知学 · 知道 · 知善 · 知美'
+      .h-cta
+        a.btn.btn-solid(href=url_for(HOME.cta1_link || '/kb/'))= HOME.cta1_text || '从知识库开始 →'
+        a.btn.btn-line(href=url_for(HOME.cta2_link || '/people/'))= HOME.cta2_text || '我是新生'
+
+      form.hero-search(action='/search/' method='get' role='search')
+        label.sr-only(for='hero-query') 搜索知识与问题
+        input#hero-query(type='search' name='q' placeholder='搜索教程、问题与经验' required)
+        button(type='submit') 搜索
+
+    //- 移动端静态商标（桌面由 canvas#phys 的物理引擎接管，手机不跑物理但也要有物件感）
+    .hero-marks
+      img.hm.hm-w(src=kbimg('/img/wb-logo.svg') alt="WorkBuddy")
+      img.hm.hm-q(src=kbimg('/img/qlit-badge.png') alt="齐鲁理工学院")
+
+    .hero-toys(aria-label='商标小球互动')
+      .hero-toys__actions
+        button#phys-launch(type='button') 再抛一次 ↗
+        button#phys-gravity(type='button' aria-pressed='false') 开启失重
+      p.phys-hint= HOME.hint || '拖住商标，甩向整个首屏。点空白处，也会有回响。'
+      p#phys-status.sr-only(role='status')
+
+    //- 跑马灯（= 物理地面）。内容输出两遍，配合 CSS 的 -50% 位移实现无缝滚动
+    .c-marquee
+      .track
+        each mq in MQ.concat(MQ)
+          span= (mq && mq.text) ? mq.text : mq
+
+block content
+  include ./includes/mixins/indexPostUI.pug
+  - var HC = site.data.home || {}
+  - var SECTIONS = (HC.sections && HC.sections.length) ? HC.sections : []
+  - var ONBOARD = (HC.onboard && HC.onboard.length) ? HC.onboard : []
+
+  - var events = (site.data.activities && site.data.activities.upcoming) || []
+  if events.length
+    .hub-announcement
+      span 近期活动
+      a(href='/activities/' + events[0].slug + '/')= events[0].title
+      span= event_date(events[0].start)
+
+  //- ============ A. 板块导览： newcomer 第一眼要知道这站有什么 ============
+  if SECTIONS.length
+    .kb-sec-head
+      h2 从这里开始
+      span.line
+    nav.kb-guide
+      each s in SECTIONS
+        a.kb-guide__card(href=url_for(s.href))
+          span.kb-guide__ico
+            != kbicon(s.icon || 'book', 21)
+          span.kb-guide__meta= s.meta || ''
+          strong.kb-guide__t= s.title
+          span.kb-guide__d= s.desc
+          span.kb-guide__go
+            | 进入
+            != kbicon('arrow', 14)
+
+  //- ============ B. 新人三步：把「不知道该干嘛」变成一条路径 ============
+  if ONBOARD.length
+    .kb-sec-head
+      h2 新人三步
+      span.line
+    .kb-onboard
+      each st, i in ONBOARD
+        .kb-onb
+          span.kb-onb__no= st.no || ('0' + (i + 1))
+          strong.kb-onb__t= st.title
+          p.kb-onb__d= st.desc
+          a.kb-onb__cta(href=url_for(st.href))
+            = st.cta || '去看看'
+            != kbicon('arrow', 14)
+
+  .kb-sec-head
+    h2 精选知识
+    span.line
+    a.more(href='/kb/') 全部知识 →
+  .hub-list.hub-featured
+    each p in community_posts().filter(p => p.featured && !p.categories.toArray().some(c => c.name === '问题库')).slice(0, 4)
+      article.hub-row
+        .hub-row__meta
+          span= p.content_type || '经验'
+          time= date(p.updated || p.date, 'YYYY-MM-DD')
+        h3
+          a(href=url_for(p.path))= p.title
+        p= p.summary
+  .kb-sec-head
+    h2 问题一起解
+    span.line
+    a.more(href='/problems/') 查看问题库 →
+  if community_problems().length
+    .hub-list
+      each p in community_problems().slice(0, 3)
+        article.hub-row
+          .hub-row__meta= p.problem_status || '待讨论'
+          h3
+            a(href=url_for(p.path))= p.title
+          p= p.summary
+  else
+    p.hub-notice 目前还没有经确认的公开协作问题。带来一个具体困难，让它成为下一次交流或项目的起点。
+  a.hub-button(href='/participate/?type=提问') 提交一个问题

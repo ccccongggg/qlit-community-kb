@@ -1,0 +1,21 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="社群知识库">
+  <defs>
+    <radialGradient id="kbFv" cx="34%" cy="26%" r="82%">
+      <stop offset="0" stop-color="#22314D"/>
+      <stop offset="0.55" stop-color="#121C2C"/>
+      <stop offset="1" stop-color="#080D16"/>
+    </radialGradient>
+    <radialGradient id="kbFvDot" cx="35%" cy="32%" r="72%">
+      <stop offset="0" stop-color="#FF4A52"/>
+      <stop offset="0.58" stop-color="#D6000F"/>
+      <stop offset="1" stop-color="#A80009"/>
+    </radialGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="url(#kbFv)"/>
+  <rect x="1.1" y="1.1" width="29.8" height="29.8" rx="8" fill="none" stroke="#5FE3C0" stroke-opacity="0.30" stroke-width="1.1"/>
+  <rect x="4.2" y="4.2" width="23.6" height="23.6" rx="5.6" fill="none" stroke="#F3F8F6" stroke-opacity="0.055" stroke-width="0.8"/>
+  <text x="16" y="16.6" font-family="'Songti SC','STSong','SimSun','Noto Serif SC',serif"
+        font-size="16" font-weight="700" fill="#F3F8F6" text-anchor="middle"
+        dominant-baseline="central">知</text>
+  <circle cx="26.1" cy="5.9" r="2.6" fill="url(#kbFvDot)"/>
+</svg>

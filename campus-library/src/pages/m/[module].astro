@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getModule, MODULES } from '../../site.config';
+
+export async function getStaticPaths() {
+  return MODULES.map((m) => ({ params: { module: m.slug } }));
+}
+
+const { module } = Astro.params;
+const mod = getModule(module);
+
+const docs = (await getCollection('docs'))
+  .filter((d) => d.id.startsWith(module + '/') && !d.data.draft)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title, 'zh'));
+---
+
+<BaseLayout title={mod?.title}>
+  <nav class="crumbs"><a href="/">首页</a> / <span>{mod?.title}</span></nav>
+  <h1>{mod?.icon} {mod?.title}</h1>
+  <p class="lead">{mod?.desc}</p>
+
+  {
+    docs.length === 0 ? (
+      <p class="empty">本模块正在建设中，欢迎投稿 🙌</p>
+    ) : (
+      <ul class="doc-list">
+        {docs.map((d) => (
+          <li>
+            <a href={`/docs/${d.id}`}>{d.data.title}</a>
+            {d.data.updated && <span class="date">{d.data.updated}</span>}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .crumbs {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 22px;
+    margin: 0 0 6px;
+  }
+  .lead {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+  .empty {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .doc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .doc-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .doc-list li:hover {
+    border-color: var(--accent);
+  }
+  .doc-list a {
+    font-size: 15px;
+  }
+  .date {
+    font-size: 12px;
+    color: var(--muted);
+    flex: 0 0 auto;
+  }
+</style>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>内容管理 · 齐鲁理工 WorkBuddy 社群知识库</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #0b1220;
+        color: #e9f5f1;
+        font-family: -apple-system, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      }
+      #boot {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+      }
+      #boot .ring {
+        width: 34px;
+        height: 34px;
+        border: 3px solid rgba(40, 184, 148, 0.25);
+        border-top-color: #28b894;
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+      }
+      #boot .txt {
+        font-size: 14px;
+        letter-spacing: 0.06em;
+        color: #9db3ad;
+      }
+      #boot .err {
+        max-width: 440px;
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.7;
+        color: #ffb4b4;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="boot">
+      <div class="ring"></div>
+      <div class="txt">正在加载内容管理后台…</div>
+    </div>
+
+    <!--
+      自托管版 Sveltia CMS（不走 CDN，国内访问更稳）。
+      升级方式：下载新版 https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js 覆盖同名文件即可。
+      注意：官方明确要求用普通 script，不要加 type="module"。
+    -->
+    <script
+      src="./sveltia-cms.js?v=0.250.2"
+      onload="var b=document.getElementById('boot'); b && b.parentNode.removeChild(b);"
+      onerror="document.getElementById('boot').innerHTML='<div class=&quot;err&quot;>后台脚本加载失败：请确认 /admin/sveltia-cms.js 是否存在，或刷新重试。</div>';"
+    ></script>
+    <noscript>
+      <div id="boot">
+        <div class="err">需要开启 JavaScript 才能使用内容管理后台。</div>
+      </div>
+    </noscript>
+  </body>
+</html>

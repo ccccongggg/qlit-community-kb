@@ -1,0 +1,20 @@
+# dependencies
+node_modules
+
+# build output
+dist
+
+# astro generated types
+.astro
+
+# env
+.env
+.env.production
+
+# os / editor
+.DS_Store
+Thumbs.db
+
+# logs / temp build artifacts
+*.log
+install_done.txt

@@ -1,0 +1,43 @@
+extends includes/layout.pug
+
+block content
+  #article-container.container.hub-document.hub-event(data-event-end=page.end data-event-deadline=page.deadline data-event-state=page.status)
+    a.hub-back(href='/activities/') ← 活动库
+    p.hub-eyebrow(data-event-status)= event_state(page)
+    h1= page.title
+    p.hub-lead= page.desc
+    dl.hub-facts
+      dt 时间
+      dd= event_date(page.start)
+      dt 地点
+      dd= page.place
+      dt 适合谁
+      dd= page.audience || '对 AI 与社群协作感兴趣的同学'
+      if page.deadline
+        dt 报名截止
+        dd= event_date(page.deadline)
+    if page.notice
+      p.hub-notice= page.notice
+    h2 活动安排
+    each item in (page.agenda || [])
+      p= item
+    h2 参加方式
+    if ['报名中'].includes(event_state(page)) && safe_link(page.registration_url)
+      a.hub-button.event-registration(href=safe_link(page.registration_url) target='_blank' rel='noopener') 前往报名
+    else if event_state(page) === '已结束'
+      p 本场活动已结束。回顾与资料由活动负责人整理后补充。
+    else
+      p 线上报名尚未开放。时间与场地以组织者最终通知为准。
+      a.hub-button(href='/participate/?type=活动咨询') 咨询本场活动
+    h2 参加前准备
+    p= page.preparation || '准备一个你想交流的问题；需要携带的设备以组织者通知为准。'
+    h2 活动回顾与资料
+    if page.recap
+      p= page.recap
+    else
+      p 活动结束后将在本页补充回顾、照片与可公开的资料。
+    each item in (page.resources || [])
+      if safe_link(item.url)
+        p
+          a(href=safe_link(item.url))= item.title
+    a(href='/participate/?type=活动投稿') 提交活动记录 →

@@ -1,0 +1,565 @@
+backend:
+  name: github
+  repo: ccccongggg/qlit-community-kb
+  branch: main
+  auth_methods:
+  - token
+  commit_messages:
+    create: 'cms(新建): {{collection}} {{slug}}'
+    update: 'cms(更新): {{collection}} {{slug}}'
+    delete: 'cms(删除): {{collection}} {{slug}}'
+    uploadMedia: 'cms(上传图片): {{path}}'
+    deleteMedia: 'cms(删除图片): {{path}}'
+locale: zh_Hans
+media_folder: source/img/uploads
+public_folder: /img/uploads
+site_url: https://community-kb.app.workbuddy.host
+display_url: community-kb.app.workbuddy.host
+logo_url: /img/logo-mark.svg
+editor:
+  preview: false
+collections:
+- name: posts
+  label: 文章
+  label_singular: 文章
+  description: 知识库经验帖、问题库案例都写在这里。发布后自动出现在对应分类与首页「最新动态」。
+  folder: source/_posts
+  create: true
+  delete: true
+  slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+  summary: '{{title}}'
+  sortable_fields:
+  - date
+  - title
+  fields:
+  - name: title
+    label: 标题
+    widget: string
+    hint: 一句话说清这篇讲什么，别用「随便记一下」这种。
+  - name: date
+    label: 发布日期
+    widget: datetime
+    date_format: YYYY-MM-DD
+    time_format: HH:mm
+    format: YYYY-MM-DD HH:mm:ss
+    required: true
+  - name: categories
+    label: 分类路径
+    widget: list
+    required: true
+    default:
+    - 知识库
+    hint: '按层级从上到下填（回车分隔）：
+
+      第 1 行填大板块 → 知识库 或 问题库
+
+      第 2 行填子分类 → AI应用 / 编程 / 设计 / 成员经验 / 负责人经验
+
+      （问题库的文章只填「问题库」一行即可）
+
+      '
+  - name: tags
+    label: 标签
+    widget: list
+    required: false
+    hint: 回车分隔，如 知学、效率、协作
+  - name: cover
+    label: 封面图
+    widget: image
+    required: false
+    hint: 可不填；上传的图片会自动存到 /img/uploads/
+  - name: summary
+    label: 一句话摘要
+    widget: text
+    required: false
+  - name: author
+    label: 作者署名
+    widget: string
+    default: 社群编辑组
+  - name: content_type
+    label: 内容类型
+    widget: select
+    options:
+    - 教程
+    - 经验
+    - 项目复盘
+    - 资源清单
+    default: 经验
+  - name: content_status
+    label: 内容状态
+    widget: select
+    options:
+    - published
+    - example
+    default: published
+  - name: problem_status
+    label: 问题状态
+    widget: select
+    options:
+    - 待讨论
+    - 招募中
+    - 处理中
+    - 已解决
+    - 暂缓
+    required: false
+  - name: featured
+    label: 精选推荐
+    widget: boolean
+    default: false
+  - name: updated
+    label: 更新时间
+    widget: datetime
+    required: false
+  - name: cover_thumb
+    label: 方形缩略图
+    widget: image
+    required: false
+  - name: owner
+    label: 问题负责人
+    widget: string
+    required: false
+  - name: progress
+    label: 最近进展
+    widget: text
+    required: false
+  - name: result_url
+    label: 成果链接
+    widget: string
+    required: false
+  - name: source_url
+    label: 原始讨论链接
+    widget: string
+    required: false
+  - name: body
+    label: 正文
+    widget: markdown
+    hint: 支持 Markdown：## 小标题、**粗体**、> 引用、- 列表、[链接](https://...)
+- name: people
+  label: 社群伙伴
+  description: 成员卡片与详情页都由这份名单生成，改完自动同步。
+  files:
+  - name: list
+    label: 成员名单
+    file: source/_data/people.yml
+    fields:
+    - name: list
+      label: 成员
+      label_singular: 成员
+      widget: list
+      hint: 拖动可调整在「社群大佬」页面里的显示顺序
+      summary: '{{fields.name}} · {{fields.role}}'
+      fields:
+      - name: published
+        label: 已确认公开展示
+        widget: boolean
+        default: false
+      - name: help
+        label: 可以提供的帮助
+        widget: text
+        required: false
+      - name: contact_url
+        label: 本人确认的公开联系链接
+        widget: string
+        required: false
+      - name: slug
+        label: 网址标识
+        widget: string
+        hint: 英文小写 + 连字符（如 yin-xiancong）。改了旧链接会失效。
+      - name: name
+        label: 姓名
+        widget: string
+      - name: avatar
+        label: 头像
+        widget: image
+        required: false
+        hint: 建议正方形图片，不填会显示空白
+      - name: role
+        label: 身份 / 头衔
+        widget: string
+        hint: 如「社群发起人 · WorkBuddy 校园大使」
+      - name: ptags
+        label: 方向标签
+        widget: list
+        hint: 回车分隔，如 技术、内容、设计
+      - name: intro
+        label: 一句话介绍
+        widget: text
+      - name: skills
+        label: 擅长领域（前台只展示名称）
+        widget: list
+        required: false
+        summary: '{{fields.name}} {{fields.level}}%'
+        fields:
+        - name: name
+          label: 能力名
+          widget: string
+        - name: level
+          label: 熟练度（0-100）
+          widget: number
+          value_type: int
+          min: 0
+          max: 100
+          default: 80
+      - name: projects
+        label: 做过的事
+        widget: list
+        required: false
+        summary: '{{fields.name}}'
+        fields:
+        - name: name
+          label: 项目名
+          widget: string
+        - name: desc
+          label: 一句话说明
+          widget: string
+        - name: url
+          label: 公开作品链接
+          widget: string
+          required: false
+- name: activities
+  label: 活动库
+  description: 「即将举办」与「往期回顾」的卡片都来自这里。
+  files:
+  - name: activities
+    label: 活动内容
+    file: source/_data/activities.yml
+    fields:
+    - name: hero
+      label: 顶部文案
+      widget: object
+      fields:
+      - name: title
+        label: 标题
+        widget: string
+      - name: sub
+        label: 说明
+        widget: text
+    - name: upcoming
+      label: 活动安排
+      widget: list
+      required: false
+      fields:
+      - name: slug
+        label: 网址标识
+        widget: string
+      - name: title
+        label: 活动名
+        widget: string
+      - name: start
+        label: 开始时间
+        widget: datetime
+        format: YYYY-MM-DDTHH:mm:ssZ
+      - name: end
+        label: 结束时间
+        widget: datetime
+        format: YYYY-MM-DDTHH:mm:ssZ
+      - name: deadline
+        label: 报名截止
+        widget: datetime
+        required: false
+        format: YYYY-MM-DDTHH:mm:ssZ
+      - name: place
+        label: 地点
+        widget: string
+      - name: status
+        label: 活动状态
+        widget: select
+        options:
+        - 即将开放
+        - 报名中
+        - 报名截止
+        - 已结束
+        - 已取消
+      - name: desc
+        label: 活动简介
+        widget: text
+      - name: audience
+        label: 适合谁
+        widget: string
+      - name: notice
+        label: 待确认事项或变更通知
+        widget: text
+        required: false
+      - name: registration_url
+        label: 报名链接
+        widget: string
+        required: false
+      - name: preparation
+        label: 参加前准备
+        widget: text
+        required: false
+      - name: agenda
+        label: 议程
+        widget: list
+        required: false
+      - name: recap
+        label: 回顾
+        widget: text
+        required: false
+      - name: resources
+        label: 回顾资料
+        widget: list
+        required: false
+        fields:
+        - name: title
+          label: 名称
+          widget: string
+        - name: url
+          label: 链接
+          widget: string
+    - name: past
+      label: 历史活动
+      widget: list
+      required: false
+      fields:
+      - name: slug
+        label: 网址标识
+        widget: string
+      - name: title
+        label: 活动名
+        widget: string
+      - name: start
+        label: 开始时间
+        widget: datetime
+        format: YYYY-MM-DDTHH:mm:ssZ
+      - name: end
+        label: 结束时间
+        widget: datetime
+        format: YYYY-MM-DDTHH:mm:ssZ
+      - name: deadline
+        label: 报名截止
+        widget: datetime
+        required: false
+        format: YYYY-MM-DDTHH:mm:ssZ
+      - name: place
+        label: 地点
+        widget: string
+      - name: status
+        label: 活动状态
+        widget: select
+        options:
+        - 即将开放
+        - 报名中
+        - 报名截止
+        - 已结束
+        - 已取消
+      - name: desc
+        label: 活动简介
+        widget: text
+      - name: audience
+        label: 适合谁
+        widget: string
+      - name: notice
+        label: 待确认事项或变更通知
+        widget: text
+        required: false
+      - name: registration_url
+        label: 报名链接
+        widget: string
+        required: false
+      - name: preparation
+        label: 参加前准备
+        widget: text
+        required: false
+      - name: agenda
+        label: 议程
+        widget: list
+        required: false
+      - name: recap
+        label: 回顾
+        widget: text
+        required: false
+      - name: resources
+        label: 回顾资料
+        widget: list
+        required: false
+        fields:
+        - name: title
+          label: 名称
+          widget: string
+        - name: url
+          label: 链接
+          widget: string
+- name: home
+  label: 首页文案
+  description: 首页首屏的大标题、副标题、按钮、跑马灯口号。改完需要重新构建才生效。
+  files:
+  - name: home
+    label: 首屏文案
+    file: source/_data/home.yml
+    fields:
+    - name: kicker
+      label: 顶部小字
+      widget: string
+    - name: title_line1
+      label: 主标题第一行
+      widget: string
+      hint: 这一行是描边（空心）字
+    - name: title_line2
+      label: 主标题第二行
+      widget: string
+      hint: 这一行是实心渐变色
+    - name: sub_html
+      label: 副标题
+      widget: text
+      hint: 支持 HTML，如用 <code>AI</code> 让词变成代码块样式
+    - name: cta1_text
+      label: 主按钮文字
+      widget: string
+    - name: cta1_link
+      label: 主按钮链接
+      widget: string
+    - name: cta2_text
+      label: 次按钮文字
+      widget: string
+    - name: cta2_link
+      label: 次按钮链接
+      widget: string
+    - name: hint
+      label: 物理商标提示
+      widget: string
+    - name: marquee
+      label: 跑马灯口号
+      widget: list
+      hint: 每行一句，会循环滚动
+      fields:
+      - name: text
+        label: 文案
+        widget: string
+    - name: sections
+      label: 板块导览
+      widget: list
+      fields:
+      - name: title
+        label: 标题
+        widget: string
+      - name: meta
+        label: 英文标识
+        widget: string
+      - name: desc
+        label: 说明
+        widget: string
+      - name: href
+        label: 链接
+        widget: string
+      - name: icon
+        label: 图标名
+        widget: string
+    - name: onboard
+      label: 新人步骤
+      widget: list
+      fields:
+      - name: 'no'
+        label: 序号
+        widget: string
+      - name: title
+        label: 标题
+        widget: string
+      - name: desc
+        label: 说明
+        widget: string
+      - name: href
+        label: 链接
+        widget: string
+      - name: cta
+        label: 按钮文案
+        widget: string
+- name: pages
+  label: 板块首页
+  description: 普通说明页可编辑正文。知识库和问题库中的 hub 标签请保留。
+  files:
+  - name: kb
+    label: 知识库首页
+    file: source/kb/index.md
+    fields:
+    - name: title
+      label: 页面标题
+      widget: string
+    - name: layout
+      label: 布局（请勿修改）
+      widget: string
+      hint: 必须保持 page
+    - name: top_img
+      label: 顶部大图开关（请勿修改）
+      widget: boolean
+      default: false
+    - name: body
+      label: 页面内容
+      widget: markdown
+      hint: 保留 {% hub ... %} 标签，列表由文章数据自动生成。
+  - name: problems
+    label: 问题库首页
+    file: source/problems/index.md
+    fields:
+    - name: title
+      label: 页面标题
+      widget: string
+    - name: layout
+      label: 布局（请勿修改）
+      widget: string
+    - name: top_img
+      label: 顶部大图开关（请勿修改）
+      widget: boolean
+      default: false
+    - name: body
+      label: 页面内容
+      widget: markdown
+      hint: 保留 {% hub ... %} 标签，列表由文章数据自动生成。
+  - name: people
+    label: 社群伙伴首页
+    file: source/people/index.md
+    fields:
+    - name: title
+      label: 页面标题
+      widget: string
+    - name: layout
+      label: 布局（请勿修改）
+      widget: string
+    - name: top_img
+      label: 顶部大图开关（请勿修改）
+      widget: boolean
+      default: false
+  - name: start
+    label: 新人指南
+    file: source/start/index.md
+    fields:
+    - name: title
+      label: 标题
+      widget: string
+    - name: layout
+      label: 布局
+      widget: string
+      default: page
+    - name: top_img
+      label: 顶部大图
+      widget: boolean
+      default: false
+    - name: aside
+      label: 侧栏
+      widget: boolean
+      default: false
+    - name: body
+      label: 正文
+      widget: markdown
+  - name: about
+    label: 关于与内容规则
+    file: source/about/index.md
+    fields:
+    - name: title
+      label: 标题
+      widget: string
+    - name: layout
+      label: 布局
+      widget: string
+      default: page
+    - name: top_img
+      label: 顶部大图
+      widget: boolean
+      default: false
+    - name: aside
+      label: 侧栏
+      widget: boolean
+      default: false
+    - name: body
+      label: 正文
+      widget: markdown

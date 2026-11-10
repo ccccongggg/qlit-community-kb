@@ -1,0 +1,18 @@
+extends includes/layout.pug
+
+block content
+  #article-container.container
+    .people-wrap
+      p.kb-kicker 社群伙伴
+      .people-hero
+        h2.people-hero__title 找到一起动手的伙伴
+        p.people-hero__sub 了解擅长方向、可以交流的话题与作品。成员资料确认后逐步开放展示。
+      .people-grid
+        each p in ((site.data.people && site.data.people.list) || []).filter(p => p.published !== false)
+          a.people-card(href=`/people/${p.slug}/`)
+            img.people-card__avatar(src=kbimg(p.avatar), alt=p.name)
+            .people-card__name= p.name
+            .people-card__role= p.role
+            .people-card__tags
+              each t in p.ptags
+                span.people-tag= t

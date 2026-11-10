@@ -1,0 +1,84 @@
+---
+import type { ModuleDef } from '../site.config';
+
+interface Props {
+  module: ModuleDef;
+  count?: number;
+}
+
+const { module, count = 0 } = Astro.props;
+
+const badgeText: Record<ModuleDef['status'], string> = {
+  ready: '内容充足',
+  seed: '种子已建',
+  soon: '建设中',
+};
+
+const href = `/m/${module.slug}`;
+---
+
+<a class="card" href={href}>
+  <div class="card-icon">{module.icon}</div>
+  <div class="card-body">
+    <h3>{module.title}</h3>
+    <p>{module.desc}</p>
+    <span class={`badge ${module.status}`}>
+      {badgeText[module.status]}{count > 0 ? ` · ${count} 篇` : ''}
+    </span>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease,
+      border-color 0.12s ease;
+  }
+  .card:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    border-color: var(--accent);
+  }
+  .card-icon {
+    font-size: 28px;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+  .card-body h3 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    color: var(--text);
+  }
+  .card-body p {
+    margin: 0 0 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .badge.ready {
+    background: #eaf3de;
+    color: #3b6d11;
+  }
+  .badge.seed {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .badge.soon {
+    background: #f1efea;
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,50 @@
+kicker: 齐鲁理工 · WorkBuddy 校园社群
+title_line1: 社群
+title_line2: 知识库
+sub_html: 查经验、提问题、找伙伴、参加活动。<br>从一个想法开始，把它做成可以分享的成果。
+cta1_text: 浏览知识 →
+cta1_link: /kb/
+cta2_text: 加入社群
+cta2_link: /start/
+hint: 拖住商标，甩向整个首屏。点空白处，也会有回响。
+marquee:
+- text: 知学 · 知道 · 知善 · 知美 ·
+- text: 把好东西攒起来一起变强 ·
+- text: QILU INSTITUTE OF TECHNOLOGY ·
+sections:
+- title: 知识库
+  meta: MEMBER NOTES
+  desc: 成员踩坑记 · 负责人复盘 · AI 实战笔记
+  href: /kb/
+  icon: book
+- title: 问题库
+  meta: PROBLEM LOG
+  desc: 真痛点丢进来，一起用 AI 解决
+  href: /problems/
+  icon: compass
+- title: 活动库
+  meta: EVENTS
+  desc: 集训、分享会、市集的排期与留档
+  href: /activities/
+  icon: calendar
+- title: 社群伙伴
+  meta: PEOPLE
+  desc: 找到同方向的同学，一起交流与做项目
+  href: /people/
+  icon: users
+onboard:
+- 'no': '01'
+  title: 认识社群
+  desc: 了解方向、参与方式与共同约定。
+  href: /start/
+  cta: 阅读新人指南
+- 'no': '02'
+  title: 带来一个问题
+  desc: 说明你遇到的困难，寻找建议与伙伴。
+  href: /participate/?type=提问
+  cta: 整理我的问题
+- 'no': '03'
+  title: 一起动手
+  desc: 参加交流活动，分享笔记、作品或复盘。
+  href: /activities/
+  cta: 查看活动

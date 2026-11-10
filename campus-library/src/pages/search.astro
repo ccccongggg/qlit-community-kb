@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Pagefind from 'astro-pagefind/components/PagefindConfig.astro';
+---
+
+<BaseLayout title="搜索">
+  <h1>全文搜索</h1>
+  <p class="hint">
+    支持标题与正文关键词（含中文）。搜索索引在每次构建后由 Pagefind 自动生成。
+  </p>
+  <div class="search-box">
+    <Pagefind />
+  </div>
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: 22px;
+    margin: 0 0 6px;
+  }
+  .hint {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+  .search-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+</style>

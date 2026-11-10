@@ -1,0 +1,29 @@
+extends includes/layout.pug
+
+block content
+  #article-container.container.hub-document
+    a.hub-back(href='/people/') ← 社群伙伴
+    .pd-head
+      img.pd-avatar(src=kbimg(page.avatar || '/img/avatar.svg') alt=page.title)
+      .pd-meta
+        h1.pd-name= page.title
+        p= page.role
+    p.hub-lead= page.intro
+    h2 可以聊什么
+    p= page.help || '具体协作方向由本人补充。'
+    .hub-filters
+      each s in (page.skills || [])
+        span.hub-tag= s.name
+    h2 项目经历
+    each pr in (page.projects || [])
+      .hub-row
+        h3= pr.name
+        p= pr.desc
+        if safe_link(pr.url)
+          a(href=safe_link(pr.url) target='_blank' rel='noopener') 查看作品 →
+    h2 联系与协作
+    if safe_link(page.contact_url)
+      a.hub-button(href=safe_link(page.contact_url) target='_blank' rel='noopener') 通过本人公开渠道联系
+    else
+      p 暂未提供本人确认的公开联系方式。可以通过社群参与入口提出交流意向，请勿公开私人联系方式。
+      a.hub-button(href='/participate/?type=加入社群') 提出交流意向

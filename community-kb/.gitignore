@@ -1,0 +1,16 @@
+.DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+public/
+.deploy*/
+_multiconfig.yml
+
+# 本地临时产物
+.hexo_*
+_tmp/
+*.bak
+
+# 本地验证脚本（不入户）
+_verify/

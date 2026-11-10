@@ -1,0 +1,27 @@
+# ===== 依赖与构建产物 =====
+node_modules/
+dist/
+public/            # Hexo 构建输出
+build/
+
+# ===== 缓存与临时文件 =====
+.cache/
+.temp/
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== 编辑器 / 系统 =====
+.vscode/
+.idea/
+*.swp
+
+# ===== 私有资料占位（方式 C 使用）=====
+# campus-library/private/   # 真实敏感资料放此并 gitignore
+campus-library/private/
+
+# ===== 环境变量 =====
+.env
+.env.local

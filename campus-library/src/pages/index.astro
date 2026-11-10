@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ModuleCard from '../components/ModuleCard.astro';
+import { SITE, MODULES } from '../site.config';
+
+const docs = await getCollection('docs');
+const counts: Record<string, number> = {};
+for (const d of docs) {
+  const mod = d.id.split('/')[0];
+  counts[mod] = (counts[mod] || 0) + 1;
+}
+---
+
+<BaseLayout>
+  <section class="hero">
+    <h1>{SITE.school} · 校园资料库</h1>
+    <p class="lead">{SITE.description}</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="/search">🔍 搜索资料</a>
+      <a class="btn" href={SITE.contributeUrl} target="_blank" rel="noopener">✍️ 投稿 / 纠错</a>
+    </div>
+  </section>
+
+  <h2 class="section-title">六大核心模块</h2>
+  <div class="grid">
+    {MODULES.map((m) => <ModuleCard module={m} count={counts[m.slug] || 0} />)}
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    background: linear-gradient(180deg, var(--accent-soft), transparent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    margin-bottom: 32px;
+  }
+  .hero h1 {
+    margin: 0 0 10px;
+    font-size: 26px;
+  }
+  .lead {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 620px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 14px;
+  }
+  .btn:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn.primary:hover {
+    opacity: 0.92;
+  }
+  .section-title {
+    font-size: 18px;
+    margin: 0 0 16px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+</style>

@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050C0E">
+<title>知遇 PASS · QLIT 人工智能社团动态工牌</title>
+<style>
+:root{
+  --bg:#050C0E; --panel:#0A1719; --panel2:#0D2021; --line:#1D3B36;
+  --term:#00E59A; --green:#28B894; --ink:#DDF7EC; --mute:#6D9189;
+  --red:#D6000F; --mono:Consolas,"Cascadia Mono","SFMono-Regular","Courier New",monospace;
+  --cn:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--mono);min-height:100vh;
+  background-image:linear-gradient(rgba(0,229,154,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,154,.028) 1px,transparent 1px);
+  background-size:26px 26px}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px);opacity:.5}
+body.showing{overflow:hidden}
+a{color:var(--term)}
+.wrap{max-width:460px;margin:0 auto;padding:18px 16px 56px;position:relative;z-index:1}
+body.showing .wrap{display:none}
+.topbar{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--mute);border-bottom:1px solid var(--line);padding-bottom:10px;letter-spacing:.5px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--term);box-shadow:0 0 9px var(--term);margin-right:6px;animation:blink 1.6s infinite}
+@keyframes blink{0%,60%{opacity:1}80%{opacity:.25}}
+h1{font-size:19px;margin:18px 0 6px;letter-spacing:.5px;color:var(--term);font-weight:700}
+h1 .cur{display:inline-block;width:9px;height:17px;background:var(--term);vertical-align:-3px;animation:blink 1s steps(1) infinite;margin-left:4px}
+.sub{font-family:var(--cn);font-size:12px;color:var(--mute);line-height:1.7;margin:0 0 18px}
+.sec{border:1px solid var(--line);border-radius:10px;background:var(--panel);margin-bottom:14px;overflow:hidden}
+.sec>.hd{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--line);font-size:11px;color:var(--term);letter-spacing:1px;background:rgba(0,229,154,.045)}
+.sec>.hd span:last-child{color:var(--mute);letter-spacing:0}
+.bd{padding:12px}
+.row{margin-bottom:13px}.row:last-child{margin-bottom:0}
+.lab{font-size:11px;color:var(--mute);margin-bottom:6px;display:flex;justify-content:space-between}
+.lab b{color:var(--term);font-weight:400}
+input,select{width:100%;background:#061113;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:10px 11px;font-size:13px;font-family:var(--cn);outline:none}
+input:focus,select:focus{border-color:var(--term);box-shadow:0 0 0 2px rgba(0,229,154,.12)}
+input.mono{font-family:var(--mono);font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--cn);font-size:11.5px;padding:7px 10px;border-radius:5px;border:1px solid var(--line);background:#071416;color:var(--mute);cursor:pointer;user-select:none;transition:.14s;line-height:1.2}
+.chip:hover{border-color:var(--green);color:var(--ink)}
+.chip.on{background:var(--term);border-color:var(--term);color:#04120D;font-weight:700}
+.note{font-family:var(--cn);font-size:11.5px;color:var(--mute);line-height:1.9;margin-top:9px}
+.btn{flex:1;appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--ink);padding:11px 6px;border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--term);color:var(--term)}
+.btn.main{background:var(--term);border-color:var(--term);color:#04120D;font-weight:700}
+.btn.main:hover{background:#5EFFC0;color:#04120D}
+.btns{display:flex;gap:8px;margin-top:12px}
+.btn.sm{flex:none;padding:9px 11px;font-size:11px}
+.gen{width:100%;padding:15px;font-size:14px;letter-spacing:1px;margin-top:4px;box-shadow:0 8px 26px rgba(0,229,154,.2)}
+.foot{font-family:var(--cn);font-size:12px;color:var(--mute);line-height:2;margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
+.foot b{color:var(--ink)}
+
+/* 主持人模式 */
+body.host .wrap{max-width:980px;padding-top:28px}
+body.host .hide-host{display:none!important}
+.host-only{display:none!important}
+body.host .host-only{display:block!important}
+body.host .foot{font-size:13px;line-height:2.1}
+.host-grid{display:grid;grid-template-columns:340px 1fr;gap:22px;align-items:start}
+.qrbox{background:#fff;border-radius:12px;padding:14px;box-shadow:0 0 44px rgba(0,229,154,.2)}
+.qrbox canvas{width:100%;height:auto;display:block;image-rendering:pixelated}
+.host-url{font-size:13px;color:var(--term);word-break:break-all;background:#061113;border:1px solid var(--line);border-radius:6px;padding:11px;margin:12px 0}
+.steps{font-family:var(--cn);font-size:13px;line-height:2;color:var(--ink)}
+.steps b{color:var(--term);font-family:var(--mono)}
+.tracks{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.track{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:7px;padding:9px 12px;font-family:var(--cn);font-size:12px;background:var(--panel)}
+.track i{width:9px;height:9px;border-radius:2px;display:block;flex:none}
+.track span{color:var(--mute);font-family:var(--mono);font-size:11px;margin-left:auto}
+
+/* 编译过场 */
+.boot{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;background:rgba(3,10,12,.97);padding:24px}
+.boot.on{display:flex}
+.boot-in{width:min(420px,100%);border:1px solid var(--term);border-radius:12px;background:var(--panel);padding:20px;box-shadow:0 0 60px rgba(0,229,154,.18)}
+.boot-t{font-size:13px;color:var(--term);letter-spacing:1.5px;margin-bottom:14px}
+.boot-lines{font-size:12px;line-height:2;color:var(--mute);min-height:96px}
+.boot-lines b{color:var(--ink);font-weight:400}
+.boot-bar{height:6px;background:#061113;border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:8px}
+.boot-bar i{display:block;height:100%;width:0;background:var(--term);transition:width .16s linear}
+.boot-pct{font-size:11px;color:var(--term);text-align:right;margin-top:6px}
+
+/* 动态立牌舞台 */
+.show-view{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;background:#050C0E}
+.show-view.on{display:flex}
+.show-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:rgba(5,12,14,.92);font-size:11px;letter-spacing:.5px;flex:none}
+.show-top .ttl{color:var(--term);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.show-top button{appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--ink);padding:8px 10px;border-radius:6px;font-family:var(--mono);font-size:11px;cursor:pointer;white-space:nowrap}
+.show-top button:hover{border-color:var(--term);color:var(--term)}
+#stage{flex:1;width:100%;display:block;touch-action:none;cursor:grab}
+#stage.grabbing{cursor:grabbing}
+.show-hud{position:absolute;left:14px;top:58px;max-width:150px;font-size:10.5px;line-height:1.75;color:var(--mute);pointer-events:none;letter-spacing:.4px;z-index:2}
+.show-hud b{color:var(--term)}
+.show-tools{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--line);background:rgba(5,12,14,.94);flex:none}
+.show-tools .btn{font-size:12px;padding:12px 4px}
+.show-foot{flex:none;padding:7px 14px 10px;text-align:center;font-family:var(--cn);font-size:10.5px;color:var(--mute);border-top:1px solid var(--line)}
+.show-foot a{color:var(--green);text-decoration:none}
+
+.modal{position:fixed;inset:0;background:rgba(2,8,9,.94);display:none;align-items:center;justify-content:center;z-index:90;padding:18px}
+.modal.on{display:flex}
+.modal-in{background:var(--panel);border:1px solid var(--term);border-radius:12px;padding:18px;max-width:340px;width:100%;text-align:center;box-shadow:0 0 40px rgba(0,229,154,.16)}
+.modal-in h3{font-size:13px;color:var(--term);margin:0 0 12px;letter-spacing:1px}
+.modal-in img{width:230px;max-width:100%;border-radius:8px;display:block;margin:0 auto 12px}
+.modal-in p{font-family:var(--cn);font-size:11px;color:var(--mute);line-height:1.75;margin:0 0 14px}
+.modal-in .btn{width:100%;margin-top:6px}
+@media(max-width:760px){.host-grid{grid-template-columns:1fr}.qrbox{max-width:320px;margin:0 auto}}
+@media(max-width:380px){.wrap{padding:14px 11px 40px}h1{font-size:17px}.show-hud{font-size:9.5px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="formWrap">
+  <div class="topbar">
+    <div><span class="dot"></span>QLIT_AI_CLUB://PASS_TERMINAL</div>
+    <div id="modeTag">v1.3.1 · LOCAL</div>
+  </div>
+
+  <div class="hide-host">
+    <h1>&gt; ./make-my-pass<span class="cur"></span></h1>
+    <p class="sub">QLIT 人工智能社团 × WorkBuddy 校园大使 · 现场自助工牌<br>填 4 项 → 生成 → 一张会掉落、会摇摆、能拖能翻的动态立牌。</p>
+  </div>
+
+  <div class="host-only">
+    <h1>&gt; ./host-mode<span class="cur"></span></h1>
+    <p class="sub">主持人 / 投屏模式 · 把这个码给同学扫，他们就能在自己手机上做卡。</p>
+  </div>
+
+  <!-- 主持人视图 -->
+  <div class="host-only"><div class="host-grid">
+    <div>
+      <div class="sec">
+        <div class="hd"><span>[ QR ] 现场入口</span><span>SCAN ME</span></div>
+        <div class="bd"><div class="qrbox"><canvas id="hostQR"></canvas></div>
+          <div class="host-url" id="hostUrl">—</div>
+          <p class="note">二维码内容 = 当前页面地址（含 sharecode），换网络 / 上线后自动跟着变，不用重做图。</p>
+          <p class="note">打印立牌：<a href="print.html" id="printLink">打开可打印物料</a> → Ctrl+P，勾选「背景图形」。</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="sec">
+        <div class="hd"><span>[ SOP ] 现场三步</span><span>3 STEPS</span></div>
+        <div class="bd steps">
+          <div><b>01</b> 扫码 → 手机上打开本页面</div>
+          <div><b>02</b> 填名字 / 选方向 / 点技能 / 选一句话 → 点「生成」</div>
+          <div><b>03</b> 界面跳转 → 动态挂绳立牌掉落 → 拖着甩、双击翻面、保存图片</div>
+          <div style="color:var(--mute);font-size:11.5px;margin-top:8px">断网也能用：全程本地渲染，不上传姓名、不依赖服务器接口。</div>
+        </div>
+      </div>
+      <div class="tracks" id="hostTracks"></div>
+      <p class="foot"><b>切回同学端</b>：去掉地址里的 ?host=1 即可。若公网打不开，双击 start.bat 走局域网兜底（详见现场 SOP）。</p>
+    </div>
+    </div>
+  </div>
+
+  <!-- 同学端表单 -->
+  <div class="hide-host" id="formView">
+    <div class="sec">
+      <div class="hd"><span>[ INPUT ] 填写资料</span><span>4 FIELDS</span></div>
+      <div class="bd">
+        <div class="row">
+          <div class="lab"><span>01 / NAME　姓名</span><b id="idHint">NO. 2026-001</b></div>
+          <input id="fName" maxlength="12" autocomplete="off" placeholder="写上你的名字">
+        </div>
+        <div class="row">
+          <div class="lab"><span>02 / TRACK　方向</span><b>五选一</b></div>
+          <div class="chips" id="dirPick"></div>
+        </div>
+        <div class="row">
+          <div class="lab"><span>03 / SKILLS　技能标签</span><b id="tagCount">0 / 3</b></div>
+          <div class="chips" id="tagPick"></div>
+        </div>
+        <div class="row">
+          <div class="lab"><span>04 / TOPIC　想聊的一句话</span><b>预置词库</b></div>
+          <select id="fTalk"></select>
+        </div>
+        <div class="row">
+          <div class="lab"><span>05 / ID　编号（可改）</span><b>自动</b></div>
+          <input id="fNo" class="mono" value="001" maxlength="4" autocomplete="off">
+        </div>
+        <p class="note">填完点下面按钮，会跳到全屏动态立牌：掉落回弹 → 摇摆 → 可拖拽甩动 / 双击翻面 / 滚轮或双指缩放。</p>
+      </div>
+    </div>
+    <button class="btn main gen" id="genBtn">▶ 生成我的动态工牌</button>
+    <div class="btns">
+      <button class="btn sm" id="clearBtn">清空重填</button>
+      <button class="btn sm" id="qrBtn">QR: 现场入口</button>
+    </div>
+    <p class="foot">
+      <b>QLIT 人工智能社团</b> × WorkBuddy 校园大使 ·「知遇·同路人」活动身份卡。<br>
+      姓名与标签只存在本机浏览器，不上传、不落库。卡面二维码 = <b id="qrDesc">本页地址</b>，别人扫了也能做一张。<br>
+      动效参考：<a href="https://github.com/tgchtggn29-bit/lanyard-badge-studio" target="_blank">lanyard-badge-studio (MIT)</a> —— 掉落挂绳 / 拖拽摆动 / 翻面 / 缩放，纯 Canvas 2D 实现。
+    </p>
+  </div>
+</div>
+
+<!-- 编译过场 -->
+<div class="boot" id="boot"><div class="boot-in">
+  <div class="boot-t">[ COMPILING BADGE ]</div>
+  <div class="boot-lines" id="bootLines"></div>
+  <div class="boot-bar"><i id="bootBar"></i></div>
+  <div class="boot-pct" id="bootPct">0%</div>
+</div></div>
+
+<!-- 全屏动态立牌 -->
+<div class="show-view" id="showView">
+  <div class="show-top">
+    <button id="backBtn">← 修改资料</button>
+    <div class="ttl" id="showTitle">YOUR PASS</div>
+    <button id="replayBtn">↻ 重播动效</button>
+  </div>
+  <canvas id="stage"></canvas>
+  <div class="show-hud" id="hud">[ <b id="hudState">DROP</b> ]<br>拖拽甩动 · 双击翻面<br>滚轮 / 双指缩放</div>
+  <div class="show-tools">
+    <button class="btn" id="flipBtn">↻ 翻面</button>
+    <button class="btn" id="stampBtn">✓ 点亮章位</button>
+    <button class="btn main" id="saveBtn">↓ 保存图片</button>
+  </div>
+  <div class="show-foot">动效参考 <a href="https://github.com/tgchtggn29-bit/lanyard-badge-studio" target="_blank">lanyard-badge-studio (MIT)</a> · 信息只存本机 · QLIT 人工智能社团 × WorkBuddy 校园大使</div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-in">
+    <h3 id="modalTitle">[ SAVE ] 保存工牌图片</h3>
+    <img id="saveImg" alt="工牌图片">
+    <p>手机：<b>长按上方图片 → 保存图片</b>（微信 / Safari 通用）<br>电脑：点下面按钮直接下载 PNG。</p>
+    <button class="btn main" id="dlBtn">下载 PNG (1080×1712)</button>
+    <button class="btn" id="closeBtn">关闭</button>
+  </div>
+</div>
+
+<script src="qr.js"></script>
+<script>
+(function(){
+'use strict';
+var SITE='https://community-kb.app.workbuddy.host/?sharecode=A7Z4R3R7CX';
+var TRACKS=[
+  {cn:'AIGC',code:'AIGC',en:'AIGC_GEN',color:'#00E59A'},
+  {cn:'AI 硬件',code:'AI_HW',en:'AI_HARDWARE',color:'#28B894'},
+  {cn:'AI 软件',code:'AI_SW',en:'AI_SOFTWARE',color:'#3B82F6'},
+  {cn:'AI for Science',code:'AI_SCI',en:'AI_FOR_SCIENCE',color:'#6C4DFF'},
+  {cn:'运营设计',code:'OPS',en:'OPS_DESIGN',color:'#D6A853'}
+];
+var TAGS=['Python','嵌入式','前端 / Web','机械设计','文案','视觉设计','数学建模','项目管理','硬件焊接','提示词'];
+var TALKS=['想找人一起做个小项目','想认识同方向的同学','想聊聊 AI 到底能干嘛','我有个点子，缺个队友','想请教硬件从哪入门','想交换一下各自在做的东西'];
+var STAMPS=[['到场','签到完成'],['识人','认识 3 个新名字'],['认领','选定五方向之一'],['投稿','给知识库交 1 篇'],['带项目','带来 1 个点子']];
+var G={ink:'#DDF7EC',term:'#00E59A',green:'#28B894',mute:'#6D9189',line:'#1D3B36',red:'#D6000F',bg:'#050C0E',panel:'#081618'};
+var st={name:'',track:0,tags:[],talk:TALKS[0],no:'001',stamps:[1,0,0,0,0],qr:'local'};
+var mono='Consolas,"Courier New",monospace', cn='"Microsoft YaHei","PingFang SC",sans-serif';
+var W=540,H=856;
+
+/* ---------- 绘制工具 ---------- */
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function rr(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath();}
+function box(c,x,y,w,h,r,f,s,lw){rr(c,x,y,w,h,r);if(f){c.fillStyle=f;c.fill();}if(s){c.lineWidth=lw||1;c.strokeStyle=s;c.stroke();}}
+function tx(c,s,x,y,z,col,wt,al,font){c.font=(wt||'400')+' '+z+'px '+(font||mono);c.fillStyle=col;c.textAlign=al||'left';c.textBaseline='alphabetic';c.fillText(s,x,y);}
+function fit(c,s,maxW,base,wt,font){var z=base;while(z>11){c.font=(wt||'700')+' '+z+'px '+(font||cn);if(c.measureText(s).width<=maxW)break;z-=2;}return z;}
+function ln(c,x1,y1,x2,y2,col,w){c.beginPath();c.strokeStyle=col;c.lineWidth=w||1;c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();}
+function circ(c,x,y,r,f,s,lw){c.beginPath();c.arc(x,y,r,0,Math.PI*2);if(f){c.fillStyle=f;c.fill();}if(s){c.lineWidth=lw||1;c.strokeStyle=s;c.stroke();}}
+function cap(c,s,x,y,z,fg,bg){c.font='700 '+z+'px '+cn;var w=c.measureText(s).width+z*1.6,h=z*2.05;box(c,x,y,w,h,4,bg,G.term);tx(c,s,x+w/2,y+h*0.7,z,fg,'700','center',cn);return w;}
+function tagRow(c,tags,x,y,maxW,z){var cx=x,cy=y;for(var i=0;i<tags.length;i++){c.font='700 '+z+'px '+cn;var w=c.measureText(tags[i]).width+z*1.6;if(cx+w>x+maxW){cx=x;cy+=z*2.6;}cap(c,tags[i],cx,cy,z,'#04120D','rgba(0,229,154,.14)');cx+=w+z*0.5;}return cy;}
+function grid(c,w,h,col,step){c.save();c.strokeStyle=col;c.lineWidth=1;for(var x=0;x<=w;x+=step){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke();}for(var y=0;y<=h;y+=step){c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke();}c.restore();}
+function seal(c,x,y,r){circ(c,x,y,r,G.red,null);circ(c,x,y,r-4,null,'rgba(255,255,255,.4)',1.5);tx(c,'知',x,y+r*0.36,r*1.05,'#FFFFFF','700','center','"SimSun",serif');}
+function wb(c,x,y,r){circ(c,x,y,r,null,G.green,3);circ(c,x,y,r*0.4,G.green,null);}
+function noText(){return 'NO. 2026-'+(st.no||'000');}
+function track(){return TRACKS[st.track];}
+function qrText(){
+  if(st.qr==='site')return SITE;
+  var u=location.href.split('#')[0];
+  if(/^file:/i.test(u))return SITE;
+  try{var U=new URL(u);U.searchParams.delete('host');return U.toString().replace(/[?&]$/,'');}catch(e){return u;}
+}
+function cleanUrl(){try{var U=new URL(location.href);U.searchParams.delete('host');U.hash='';return U.toString();}catch(e){return location.href.split('#')[0];}}
+function drawQR(c,text,x,y,size){
+  var q=KBQR.encode(text),n=q.size+8,cell=Math.floor(size/n),px=cell*n;
+  box(c,x-7,y-7,px+14,px+14,7,'#FFFFFF',G.term,2);
+  for(var yy=0;yy<q.size;yy++)for(var xx=0;xx<q.size;xx++)if(q.modules[yy][xx]){c.fillStyle='#06120F';c.fillRect(x+(xx+4)*cell,y+(yy+4)*cell,cell,cell);}
+  return px;
+}
+
+/* ---------- 卡面（正 / 背） ---------- */
+function front(c){
+  var t=track();
+  c.fillStyle=G.bg;c.fillRect(0,0,W,H);
+  grid(c,W,H,'rgba(0,229,154,.055)',27);
+  var g=c.createRadialGradient(390,250,10,390,250,470);g.addColorStop(0,'rgba(0,229,154,.16)');g.addColorStop(1,'rgba(0,229,154,0)');c.fillStyle=g;c.fillRect(0,0,W,H);
+  c.save();c.globalAlpha=.13;for(var sy=0;sy<H;sy+=5){c.fillStyle='#00E59A';c.fillRect(0,sy,W,1);}c.restore();
+  box(c,14,14,W-28,H-28,12,null,'rgba(0,229,154,.35)',1.5);
+  for(var k=0;k<7;k++)ln(c,24,24+k*3,24+18,24+k*3,'rgba(0,229,154,.35)',1);
+  box(c,24,24,W-48,40,5,'rgba(0,229,154,.09)',null);
+  circ(c,44,44,4,G.term,null);
+  tx(c,'QLIT_AI_CLUB://PASS',58,49,14,G.term,'700','left');
+  tx(c,'[ ONLINE ]',W-40,49,12,G.mute,'400','right');
+  ln(c,24,74,W-24,74,G.line,1);
+  box(c,232,86,76,16,7,'rgba(0,229,154,.08)','rgba(0,229,154,.4)',1.5);
+  seal(c,62,132,20);wb(c,W-52,132,13);
+  tx(c,'QLIT 人工智能社团  x  WorkBuddy 校园大使',96,138,13,G.mute,'400','left',cn);
+  tx(c,'> whoami',34,190,15,G.term,'700','left');
+  var nz=fit(c,st.name||'同学',450,54,'700',cn);
+  tx(c,st.name||'同学',34,252,nz,G.ink,'700','left',cn);
+  tx(c,'FELLOW / 同路人',34,280,13,G.mute,'400','left',cn);
+  tx(c,noText(),W-34,280,14,G.term,'700','right');
+  ln(c,34,300,W-34,300,G.line,1);
+  tx(c,'> track',34,332,15,G.term,'700','left');
+  box(c,34,346,250,38,5,'rgba(0,229,154,.10)',G.term,1.5);
+  circ(c,52,365,5,t.color,null);
+  tx(c,t.en,66,371,15,G.ink,'700','left');
+  tx(c,'['+t.code+']',W-34,371,13,G.mute,'400','right');
+  tx(c,'> skills',34,420,15,G.term,'700','left');
+  if(!st.tags.length)tx(c,'[ 未选择 · 点上方标签添加 ]',34,466,13,G.mute,'400','left',cn);
+  else tagRow(c,st.tags.slice(0,3),34,434,470,17);
+  tx(c,'> topic',34,528,15,G.term,'700','left');
+  var tz=fit(c,'"'+st.talk+'"',470,18,'400',cn);
+  tx(c,'"'+st.talk+'"',34,562,tz,G.ink,'400','left',cn);
+  var seed=hash(st.name+'|'+st.no+'|'+st.track),r=seed;
+  function rnd(){r=(Math.imul(r,1664525)+1013904223)>>>0;return r/4294967296;}
+  c.save();c.globalAlpha=.28;
+  for(var i=0;i<16;i++){var yy=598+i*14,bars='';for(var j=0;j<26;j++)bars+=rnd()>.62?'▓':'░';tx(c,bars,34+(i%2)*8,yy,11,i%4===0?G.term:G.green,'400','left');}
+  c.restore();
+  ln(c,34,690,W-34,690,G.line,1);
+  var qs=drawQR(c,qrText(),34,712,116);
+  tx(c,'> scan',34+qs+22,732,15,G.term,'700','left');
+  tx(c,'扫码也来做一张',34+qs+22,758,14,G.ink,'400','left',cn);
+  var qrLocal=st.qr==='local'&&!/^file:/i.test(location.href);
+  tx(c,qrLocal?'现场工牌入口':'社团知识库入口',34+qs+22,782,12,G.mute,'400','left',cn);
+  box(c,34,806,W-68,2,0,'rgba(0,229,154,.35)',null);
+  tx(c,'知遇 · 同路人  /  QLIT x WORKBUDDY 2026',34,834,12,G.mute,'400','left',cn);
+  tx(c,'凭此卡认识 3 个新名字',W-34,834,12,G.term,'700','right',cn);
+}
+function back(c){
+  c.fillStyle=G.bg;c.fillRect(0,0,W,H);
+  grid(c,W,H,'rgba(0,229,154,.05)',27);
+  box(c,14,14,W-28,H-28,12,null,'rgba(0,229,154,.35)',1.5);
+  box(c,24,24,W-48,40,5,'rgba(0,229,154,.09)',null);
+  circ(c,44,44,4,G.term,null);
+  tx(c,'QLIT_AI_CLUB://STAMPS',58,49,14,G.term,'700','left');
+  tx(c,'[ BACK ]',W-40,49,12,G.mute,'400','right');
+  ln(c,24,74,W-24,74,G.line,1);
+  box(c,232,86,76,16,7,'rgba(0,229,154,.08)','rgba(0,229,154,.4)',1.5);
+  seal(c,62,132,20);wb(c,W-52,132,13);
+  tx(c,'QLIT 人工智能社团  x  WorkBuddy 校园大使',96,138,13,G.mute,'400','left',cn);
+  tx(c,'> ./stamps --user '+noText(),34,194,14,G.term,'700','left');
+  tx(c,'每点亮一枚章，身份就多一层',34,222,12,G.mute,'400','left',cn);
+  ln(c,34,242,W-34,242,G.line,1);
+  var done=0;
+  for(var i=0;i<5;i++){
+    var y=262+i*92,on=!!st.stamps[i];if(on)done++;
+    box(c,34,y,W-68,76,6,on?'rgba(0,229,154,.11)':'rgba(255,255,255,.025)',on?G.term:G.line,1.5);
+    box(c,50,y+18,38,38,4,on?G.term:'rgba(0,229,154,.08)',on?G.term:'rgba(0,229,154,.35)',1.5);
+    tx(c,on?'✓':'·',69,y+46,24,on?'#04120D':G.mute,'700','center');
+    tx(c,'['+(on?'x':' ')+'] '+String(i+1).padStart(2,'0')+'  '+STAMPS[i][0],104,y+34,18,on?G.ink:G.mute,'700','left',cn);
+    tx(c,STAMPS[i][1],104,y+58,13,G.mute,'400','left',cn);
+  }
+  ln(c,34,742,W-34,742,G.line,1);
+  tx(c,'PROGRESS  '+done+'/5',34,772,14,G.term,'700','left');
+  for(var b=0;b<20;b++)box(c,170+b*17,760,13,14,2,b<done*4?G.term:'rgba(0,229,154,.12)',null);
+  tx(c,done>=3?'[ OK ] 可兑换社团周边':'[ .. ] 集满 3 章可换周边',34,806,13,done>=3?G.term:G.mute,'700','left',cn);
+  tx(c,'QLIT x WORKBUDDY 2026',W-34,806,12,G.mute,'400','right');
+  ln(c,34,824,W-34,824,G.line,1);
+}
+var faces=[document.createElement('canvas'),document.createElement('canvas')];
+faces[0].width=faces[1].width=W;faces[0].height=faces[1].height=H;
+function renderFaces(){
+  for(var i=0;i<2;i++){
+    var c=faces[i].getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,H);
+    c.save();rr(c,0,0,W,H,26);c.clip();(i?back:front)(c);c.restore();
+    c.save();rr(c,1,1,W-2,H-2,26);c.lineWidth=2;c.strokeStyle='rgba(0,229,154,.28)';c.stroke();c.restore();
+  }
+}
+
+/* ---------- 状态 ---------- */
+function save(){try{localStorage.setItem('qlit-pass-v1',JSON.stringify(st));}catch(e){}}
+function load(){try{var s=JSON.parse(localStorage.getItem('qlit-pass-v1')||'null');if(s&&s.name){st=Object.assign(st,s);if(!st.stamps)st.stamps=[1,0,0,0,0];}}catch(e){}}
+function autoNo(){var n=String(hash(st.name||'同学')%50+1).padStart(3,'0');document.getElementById('fNo').value=n;st.no=n;document.getElementById('idHint').textContent=noText();}
+function sync(){
+  document.querySelectorAll('#dirPick .chip').forEach(function(el,i){el.className='chip'+(i===st.track?' on':'');if(i===st.track){el.style.background=TRACKS[i].color;el.style.borderColor=TRACKS[i].color;}else{el.style.background='';el.style.borderColor='';}});
+  document.querySelectorAll('#tagPick .chip').forEach(function(el){el.className='chip'+(st.tags.indexOf(el.dataset.t)>=0?' on':'');});
+  document.getElementById('tagCount').textContent=st.tags.length+' / 3';
+  document.getElementById('idHint').textContent=noText();
+  save();renderFaces();
+}
+function build(){
+  var dp=document.getElementById('dirPick');
+  TRACKS.forEach(function(t,i){var b=document.createElement('div');b.className='chip';b.textContent=t.cn;b.onclick=function(){st.track=i;sync();};dp.appendChild(b);});
+  var tp=document.getElementById('tagPick');
+  TAGS.forEach(function(t){var b=document.createElement('div');b.className='chip';b.dataset.t=t;b.textContent=t;b.onclick=function(){var i=st.tags.indexOf(t);if(i>=0)st.tags.splice(i,1);else{if(st.tags.length>=3)st.tags.shift();st.tags.push(t);}sync();};tp.appendChild(b);});
+  var sel=document.getElementById('fTalk');
+  TALKS.forEach(function(t){var o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
+  var ht=document.getElementById('hostTracks');
+  TRACKS.forEach(function(t){var d=document.createElement('div');d.className='track';d.innerHTML='<i style="background:'+t.color+'"></i>'+t.cn+'<span>'+t.en+'</span>';ht.appendChild(d);});
+}
+
+/* ================= v1.3 动效引擎 =================
+   依据 lanyard-badge-studio 作者复盘（2026-11-03）重做：
+   1) 确定性手调阻尼振动 θ/φ/ψ/y/c —— 卡片相位落后挂绳半拍，晃两下就停
+   2) showreel 不用物理引擎积分 → 同一时刻永远同一画面、可复现
+   3) 固定 720×1280 逻辑坐标整体缩放 → 手机 / 桌面 / 导出构图一致
+   4) 8 子采样动态模糊，仅速度超阈值启用
+   5) 交互改 16 段 Verlet 绳 + 固定 1/120 步长 + 卡片弹簧跟随绳末端
+   ================================================== */
+var LW=720,LH=1280,AX=360,AY=120,ROPE=270;
+var CARD_H=640,CARD_W=CARD_H*W/H;
+var TAU=7.6,DAMP=1.45,SWING=0.17,CARDLAG=0.11,TWIST=0.11;
+var SEGS=16,HSTEP=1/120;
+
+var P={
+  cv:null,ctx:null,w:0,h:0,dpr:1,vs:1,ox:0,oy:0,
+  t:0,last:0,frames:0,raf:0,running:false,
+  mode:'REEL',state:'COVER',
+  scale:1,scaleTo:1,face:0,flipping:false,flipPhase:0,flipTo:0,swapped:false,
+  dragging:false,dragId:null,pointers:{},pinch:0,lastMove:0,
+  ropes:[],acc:0,hx:AX,hy:AY+ROPE,vx:0,vy:0,ang:0,angVel:0,grab:null,
+  particles:[],seek:null
+};
+function clamp(v,a,b){return v<a?a:(v>b?b:v);}
+function ease(t){t=clamp(t,0,1);return 1-Math.pow(1-t,3);}
+function easeBack(t){t=clamp(t,0,1);var c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2);}
+
+/* 确定性编舞：给定 t 秒返回完整画面状态。无随机数、无积分，跑几次都一样。 */
+function sample(t){
+  var q=((t%TAU)+TAU)%TAU;
+  var s={theta:0,phi:0,psi:0,bounce:0,stretch:0,dropY:0,alpha:1,
+         scale:1,face:0,flipSX:1,tagIn:0,brand:0,brandBig:0,outro:0,
+         blur:0,state:'COVER'};
+  var breath=0.006*Math.sin(q*2.1);
+  if(q<0.45){s.theta=breath;return s;}                      // 停稳帧 = 封面
+  if(q<1.10){                                               // 标签浮现 / 品牌字弹起 / 卡片收起
+    var u=(q-0.45)/0.65;
+    s.tagIn=ease(clamp(u*1.5,0,1));
+    s.brand=easeBack(clamp((u-0.18)/0.82,0,1));
+    s.alpha=1-ease(u);s.theta=breath;
+    s.state='INTRO';return s;
+  }
+  if(q<1.38){                                               // 掉落
+    var u=(q-1.10)/0.28;
+    s.dropY=-760*(1-ease(u));s.alpha=ease(clamp(u*1.6,0,1));
+    s.tagIn=1-0.9*ease(u);s.brand=1-ease(u);s.state='DROP';return s;
+  }
+  if(q<3.55){                                               // 手调阻尼振动（τ 自落地起算）
+    var tau=q-1.38;
+    s.theta=SWING*Math.exp(-DAMP*tau)*Math.sin(7.6*tau-0.28)+breath;
+    s.phi=CARDLAG*Math.exp(-1.31*DAMP*tau)*Math.sin(7.6*tau-1.25);
+    s.psi=TWIST*Math.exp(-1.1*DAMP*tau)*Math.sin(10*tau+0.4);
+    s.bounce=34*Math.exp(-7*tau)*Math.sin(15*tau);
+    s.stretch=46*(tau/0.11)*Math.exp(1-tau/0.11);
+    s.blur=Math.max(Math.abs(s.theta),Math.abs(s.phi))*3.2;
+    s.tagIn=Math.max(0,0.12-tau*0.5);s.brand=0;
+    s.state=tau<2.05?'SWING':'SETTLE';return s;
+  }
+  s.theta=breath;
+  if(q<4.25){s.state='SETTLE';return s;}
+  if(q<5.00){var f=(q-4.25)/0.75;s.face=f<0.5?0:1;s.flipSX=Math.abs(Math.cos(f*Math.PI));s.state='FLIP';return s;}
+  if(q<5.75){var z=(q-5.00)/0.75;s.face=1;s.scale=1+0.16*Math.sin(z*Math.PI);s.brandBig=Math.sin(z*Math.PI);s.state='ZOOM';return s;}
+  if(q<6.50){var g=(q-5.75)/0.75;s.face=g<0.5?1:0;s.flipSX=Math.abs(Math.cos(g*Math.PI));s.state='FLIP';return s;}
+  s.outro=(q-6.50)/1.10;s.state='OUTRO';return s;          // 收起 → 无缝接回停稳帧
+}
+/* 卡片绝对角 = 挂绳角 θ + 卡片相对角 φ，这是「慢半拍」的关键。
+   LIVE 模式不走这里：挂点 P.hx/P.hy/P.ang 是唯一真相源，夹子 / 卡片 / 绳末端三者同源。 */
+function geometry(s){
+  if(P.mode==='LIVE'){
+    var hf=CARD_H/2+22,ga=P.ang;
+    return {hx:P.hx,hy:P.hy,ang:ga,half:hf,
+      cx:P.hx-Math.sin(ga)*hf,cy:P.hy+Math.cos(ga)*hf,
+      sx:P.flipping?Math.abs(Math.cos(P.flipPhase*Math.PI)):1,psi:0};
+  }
+  var hang=(s.hangTheta==null?s.theta:s.hangTheta);   // 挂点由绳摆角决定（sin/cos 参数化）
+  var len=ROPE+s.stretch;
+  var hx=AX+Math.sin(hang)*len;
+  var hy=AY+Math.cos(hang)*len+s.dropY+s.bounce;
+  /* 卡片画布角 = -(θ+φ)：绳向右摆(θ>0)时卡片本体指向右下 = 画布逆时针。
+     中心 = 挂点 + R(ang)*(0,half) → 卡片顶边中心恒等于挂点，绝不悬空 */
+  var ang=-(s.theta+s.phi),half=CARD_H/2+22;
+  return {hx:hx,hy:hy,ang:ang,half:half,
+    cx:hx-Math.sin(ang)*half,cy:hy+Math.cos(ang)*half,
+    sx:s.flipSX*Math.cos((s.psi||0)*0.9),psi:s.psi||0};
+}
+function liveState(){
+  return {theta:P.ang,hangTheta:P.ang,phi:0,psi:0,bounce:0,stretch:0,dropY:0,alpha:1,
+    scale:P.scale,face:P.face,
+    flipSX:P.flipping?Math.abs(Math.cos(P.flipPhase*Math.PI)):1,
+    tagIn:0,brand:0,brandBig:0,outro:0,blur:0,state:P.state};
+}
+function current(){return P.mode==='REEL'?sample(P.t):liveState();}
+
+/* ---- LIVE：二维单摆挂点（重力 + 绳长硬约束 + 线性阻尼）
+   为什么不用「两条绳各拖一块牌」：绳与牌互为约束会产生抖动，
+   且末端目标点与牌的位置是两套坐标，拖拽时必然分家 —— 就是「脱节」。
+   改为挂点是唯一物理体，绳末端每步钉死在卡片顶边两个挂孔上，物理上不可能脱开。 ---- */
+var GRAV=5300,LINDAMP=1.90,MAXV=1100;   // 挂绳 270px ≈ 0.5m 真实挂绳 → g≈5300px/s²，周期 1.42s，ζ≈0.18
+function attachPts(){                 // 两个挂孔：夹子沿卡片本地轴下移 22px 到顶边
+  var w=CARD_W*0.27,c=Math.cos(P.ang),s=Math.sin(P.ang);
+  return [{x:P.hx-w*c-22*s,y:P.hy-w*s+22*c},{x:P.hx+w*c-22*s,y:P.hy+w*s+22*c}];
+}
+function initRopes(){
+  var ap=attachPts();
+  P.ropes=[-1,1].map(function(side,idx){
+    var x0=AX+side*14,y0=AY,ex=ap[idx].x,ey=ap[idx].y;
+    var d=Math.hypot(ex-x0,ey-y0)||1;
+    var seg=Math.max(10,d*1.06/SEGS);        // 留 6% 余量 → 松垮、能自然下垂
+    var pts=[];
+    for(var i=0;i<=SEGS;i++){var u=i/SEGS,x=x0+(ex-x0)*u,y=y0+(ey-y0)*u;pts.push({x:x,y:y,px:x,py:y});}
+    return {side:side,pts:pts,seg:seg};
+  });
+}
+function hangStep(h){
+  if(P.dragging)return;                       // 拖拽时由指针直接写 hx/hy
+  P.vy+=GRAV*h;
+  var dm=Math.exp(-LINDAMP*h);
+  P.vx*=dm;P.vy*=dm;
+  var sp=Math.hypot(P.vx,P.vy);
+  if(sp>MAXV){P.vx*=MAXV/sp;P.vy*=MAXV/sp;}
+  P.hx+=P.vx*h;P.hy+=P.vy*h;
+  var dx=P.hx-AX,dy=P.hy-AY,d=Math.hypot(dx,dy)||1;
+  if(d>ROPE){                                 // 挂绳只限上界：能被提起变松，不能被拉长
+    var nx=dx/d,ny=dy/d;
+    P.hx=AX+nx*ROPE;P.hy=AY+ny*ROPE;
+    var vr=P.vx*nx+P.vy*ny;
+    if(vr>0){P.vx-=nx*vr;P.vy-=ny*vr;}
+  }
+  if(P.hy>AY+ROPE){P.hy=AY+ROPE;if(P.vy>0)P.vy=0;}
+  if(P.hx<28)P.hx=28; if(P.hx>LW-28)P.hx=LW-28;
+}
+function verlet(h){
+  /* 卡片角先算：带阻尼弹簧跟随挂绳方向（7.5 rad/s，ζ=0.55）→ 永远慢半拍。
+     必须在钉绳末端之前，否则本步的绳末端会落后卡片一个微小角度（实测 2.5px 空隙）。 */
+  var dir=-clamp(Math.atan2(P.hx-AX,Math.max(60,P.hy-AY)),-1.2,1.2);   // 画布角 = -绳角
+  var acc=56.25*(dir-P.ang)-8.25*P.angVel;
+  P.angVel+=acc*h;P.ang+=P.angVel*h;
+  var damp=Math.exp(-1.1*h),maxV=1100*h,grav=2200*h*h;
+  var ap=attachPts();
+  for(var r=0;r<P.ropes.length;r++){
+    var R=P.ropes[r],pts=R.pts,n=SEGS,i,j,it;
+    for(i=1;i<n;i++){                          // 末端不参与自由积分，永远由牌决定
+      var p=pts[i],vx=(p.x-p.px)*damp,vy=(p.y-p.py)*damp,sp=Math.hypot(vx,vy);
+      if(sp>maxV){vx*=maxV/sp;vy*=maxV/sp;}
+      p.px=p.x;p.py=p.y;p.x+=vx;p.y+=vy+grav;
+    }
+    var tx=ap[r].x,ty=ap[r].y,ax0=AX+R.side*14;
+    for(it=0;it<8;it++){
+      pts[0].x=ax0;pts[0].y=AY;pts[n].x=tx;pts[n].y=ty;
+      for(j=0;j<n;j++){
+        var a=pts[j],b=pts[j+1],ex=b.x-a.x,ey=b.y-a.y,el=Math.hypot(ex,ey);
+        if(el<=R.seg||el<1e-6)continue;         // 只能松，不能拉长
+        var wa=(j===0?0:1),wb=(j+1===n?0:1),tot=wa+wb;
+        if(!tot)continue;
+        var k=(el-R.seg)/el;
+        a.x+=ex*k*(wa/tot);a.y+=ey*k*(wa/tot);
+        b.x-=ex*k*(wb/tot);b.y-=ey*k*(wb/tot);
+      }
+      pts[0].x=ax0;pts[0].y=AY;pts[n].x=tx;pts[n].y=ty;
+    }
+  }
+}
+function enterLive(){
+  if(P.mode==='LIVE')return;
+  var s=current(),g=geometry(s);              // 先取 REEL 当前帧，平滑接管
+  P.mode='LIVE';P.face=s.face;P.scale=s.scale;P.scaleTo=s.scale;P.acc=0;P.grab=null;
+  P.hx=g.hx;P.hy=g.hy;P.vx=0;P.vy=0;P.ang=g.ang;P.angVel=0;
+  initRopes();setHud('LIVE');
+}
+function stepLive(dt){
+  P.acc+=Math.min(dt,0.05);
+  var guard=0;
+  while(P.acc>=HSTEP&&guard++<12){
+    var h=HSTEP;P.acc-=h;
+    hangStep(h);
+    verlet(h);
+  }
+}
+
+/* ---- 舞台：逻辑坐标整体缩放 ---- */
+function resizeStage(){
+  var cv=P.cv,rect=cv.getBoundingClientRect();
+  P.w=Math.max(200,rect.width);P.h=Math.max(260,rect.height);
+  P.dpr=Math.min(2,window.devicePixelRatio||1);
+  cv.width=Math.round(P.w*P.dpr);cv.height=Math.round(P.h*P.dpr);
+  P.ctx=cv.getContext('2d');P.ctx.setTransform(P.dpr,0,0,P.dpr,0,0);
+  P.vs=Math.min(P.w/LW,P.h/LH);
+  /* 宽屏投屏略放大，避免大屏上工牌过小；手机竖屏仍严格 720×1280 一致 */
+  if(P.w>P.h*1.25)P.vs*=1.22;
+  P.ox=(P.w-LW*P.vs)/2;P.oy=(P.h-LH*P.vs)/2;
+  if(document.getElementById('showView').className.indexOf('on')>=0)drawStage();
+}
+function startShow(){
+  var sv=document.getElementById('showView');sv.className='show-view on';
+  document.body.className=document.body.className.replace(' host','')+' showing';
+  document.getElementById('showTitle').textContent='YOUR PASS / '+(st.name||'同学')+' / '+noText();
+  resizeStage();
+  P.t=0;P.last=0;P.frames=0;P.mode='REEL';P.state='COVER';
+  P.scale=1;P.scaleTo=1;P.face=0;P.flipping=false;P.flipPhase=0;P.swapped=false;
+  P.grab=null;P.ropes=[];P.acc=0;P.seek=null;
+  var seed=hash('bg'),r=seed;P.particles=[];
+  for(var i=0;i<44;i++){r=(Math.imul(r,1664525)+1013904223)>>>0;P.particles.push({x:r/4294967296,y:(r=(Math.imul(r,1664525)+1013904223)>>>0)/4294967296,s:0.4+(r%13)/10,v:0.006+(r%9)/900});}
+  /* ?drag=弧度 定格 LIVE 摆动姿态（验收用：看绳与牌是否咬合） */
+  var dv=/[?&]drag=(-?[\d.]+)/.exec(location.search);
+  if(dv){
+    enterLive();
+    var dth=parseFloat(dv[1])||0;
+    P.hx=AX+Math.sin(dth)*ROPE;P.hy=AY+Math.cos(dth)*ROPE;P.vx=0;P.vy=0;
+    for(var dk=0;dk<40;dk++)stepLive(1/60);
+    drawStage();P.running=false;return;
+  }
+  /* ?seek=秒 直接取确定性状态画一帧并定格，绕开无头浏览器不推进 rAF */
+  var sk=/[?&]seek=([\d.]+)/.exec(location.search);
+  if(sk){
+    P.seek=clamp(parseFloat(sk[1])||0,0,60);P.t=P.seek;P.state='SEEK';
+    drawStage();P.running=false;
+    var S=sample(P.seek),g=geometry(S),px='ERR';
+    document.getElementById('hudState').textContent='SEEK '+P.seek.toFixed(2)+'s';
+    try{px=P.ctx.getImageData(Math.round(P.w/2*P.dpr),Math.round(P.h/2*P.dpr),1,1).data.join(',');}catch(e){}
+    var simTxt='';
+    if(/[?&]sim=1/.test(location.search)){
+      enterLive();
+      var rt=P.cv.getBoundingClientRect();
+      function ev(x,y,id){return {pointerId:id,clientX:x,clientY:y,preventDefault:function(){}};}
+      function sc(lx,ly){return [rt.left+P.ox+lx*P.vs,rt.top+P.oy+ly*P.vs];}
+      function gapMax(){var ap=attachPts(),m=0;
+        for(var ri=0;ri<P.ropes.length;ri++){var e=P.ropes[ri].pts[SEGS];
+          m=Math.max(m,Math.hypot(e.x-ap[ri].x,e.y-ap[ri].y));}
+        return m;}
+      function run(sec){var n=Math.round(sec*60);for(var k=0;k<n;k++)stepLive(1/60);}
+      var g0=geometry(liveState()),s0=sc(g0.cx,g0.cy);
+      onDown(ev(s0[0],s0[1],1));var hit=P.dragging;
+      var h0x=P.hx,h0y=P.hy;
+      /* 沿圆周抡：右 0.85 → 左 -0.95 → 右 0.75 松手（真实甩动，不越绳长） */
+      var seq=[0.85,-0.95,0.75];
+      for(var qi=0;qi<seq.length;qi++){
+        var tq=seq[qi],q=sc(AX+Math.sin(tq)*ROPE,AY+Math.cos(tq)*ROPE);
+        onMove(ev(q[0],q[1],1));run(0.05);
+      }
+      var dragD=Math.hypot(P.hx-h0x,P.hy-h0y);
+      var gapDrag=gapMax();                    // 拖拽甩动过程中：绳末端 vs 卡片挂孔
+      onUp(ev(0,0,1));
+      var settle=-1,gapSettle=0,peak=[],lastPeak=0;
+      for(var fi=0;fi<360;fi++){                // 6 秒自由衰减
+        stepLive(1/60);
+        gapSettle=Math.max(gapSettle,gapMax());
+        var thn=Math.abs(Math.atan2(P.hx-AX,Math.max(1,P.hy-AY)));
+        lastPeak=Math.max(lastPeak,thn);
+        if(fi%30===29){peak.push(lastPeak.toFixed(3));lastPeak=0;}
+      }
+      for(var pi2=0;pi2<peak.length;pi2++){     // 停稳 = 之后每个 0.5s 窗摆角都 <0.02rad(1.1°)
+        var quiet=true;
+        for(var pj=pi2;pj<peak.length;pj++)if(parseFloat(peak[pj])>0.02){quiet=false;break;}
+        if(quiet){settle=pi2*0.5;break;}
+      }
+      var restY=P.hy-(AY+ROPE);
+      /* 提起测试：把牌拖到靠近锚点，牌应上升、绳变松，且仍不脱节 */
+      var us=sc(P.hx,P.hy),up=sc(AX+40,AY+130);
+      onDown(ev(us[0],us[1],2));onMove(ev(up[0],up[1],2));
+      run(0.10);var lifted=(P.hy<AY+ROPE-40),gapUp=gapMax();
+      onUp(ev(0,0,2));run(0.60);var gapBack=gapMax();
+      drawStage();
+      simTxt='|SIM hit='+hit+' dragD='+dragD.toFixed(0)+' gapDrag='+gapDrag.toFixed(2)
+        +' peak='+peak.join(',')+' settle='+(settle<0?'none':settle.toFixed(1)+'s')+' restY='+restY.toFixed(1)
+        +' gapSettle='+gapSettle.toFixed(2)+' lift='+lifted+' gapUp='+gapUp.toFixed(2)+' gapBack='+gapBack.toFixed(2)
+        +' ropes='+P.ropes.length+' segs='+(P.ropes[0]?P.ropes[0].pts.length-1:0);
+    }
+    var dbg=document.createElement('div');dbg.id='seekdebug';dbg.style.display='none';
+    dbg.textContent='SEEKDBG t='+P.seek.toFixed(2)+' state='+S.state+' theta='+S.theta.toFixed(3)+' phi='+S.phi.toFixed(3)+' psi='+S.psi.toFixed(3)+' blur='+S.blur.toFixed(2)+' cardY='+g.cy.toFixed(0)+' pixel='+px+simTxt;
+    document.body.appendChild(dbg);
+    return;
+  }
+  if(!P.running){P.running=true;P.raf=requestAnimationFrame(frame);}
+}
+function stopShow(){
+  document.getElementById('showView').className='show-view';
+  document.body.className=document.body.className.replace(/\s*showing/,'');
+  if(P.running){cancelAnimationFrame(P.raf);P.running=false;}
+  resizeStage();
+}
+function startFlip(to){
+  if(P.flipping)return;
+  P.flipping=true;P.flipPhase=0;P.flipTo=(to==null?(P.face?0:1):to);P.swapped=false;
+  P.state='FLIP';
+}
+function setHud(s){if(P.state!==s){P.state=s;var e=document.getElementById('hudState');if(e)e.textContent=s;}}
+function frame(now){
+  if(!P.running)return;
+  var dt=P.last?Math.min(0.034,(now-P.last)/1000):0.016;P.last=now;
+  P.t+=dt;P.frames++;update(dt);drawStage();P.raf=requestAnimationFrame(frame);
+}
+function update(dt){
+  for(var pi=0;pi<P.particles.length;pi++){var pp=P.particles[pi];pp.y-=pp.v*dt*60;if(pp.y<0)pp.y=1;}
+  if(P.mode==='REEL'){
+    var S=sample(P.t);
+    P.face=S.face;P.scale=S.scale;
+    if(P.t>=TAU*3)enterLive();                  // 循环 3 次后停回停稳帧
+    else if(S.state!==P.state)setHud(S.state);
+  }else{
+    stepLive(dt);
+    if(P.flipping){
+      P.flipPhase+=dt/0.62;
+      if(P.flipPhase>=0.5&&!P.swapped){P.face=P.flipTo;P.swapped=true;renderFaces();}
+      if(P.flipPhase>=1){P.flipping=false;P.flipPhase=0;setHud('LIVE');}
+    }
+    P.scale+=(P.scaleTo-P.scale)*Math.min(1,dt*6);
+  }
+}
+
+/* ---- 绘制 ---- */
+function drawStage(){
+  var c=P.ctx,w=P.w,h=P.h;if(!c)return;
+  c.setTransform(P.dpr,0,0,P.dpr,0,0);c.clearRect(0,0,w,h);
+  c.fillStyle='#050C0E';c.fillRect(0,0,w,h);
+  grid(c,w,h,'rgba(0,229,154,.045)',30);
+  var bg=c.createRadialGradient(w/2,h*0.42,10,w/2,h*0.42,Math.max(w,h)*0.72);
+  bg.addColorStop(0,'rgba(0,229,154,.10)');bg.addColorStop(1,'rgba(0,229,154,0)');
+  c.fillStyle=bg;c.fillRect(0,0,w,h);
+  c.save();c.globalAlpha=.10;for(var sy=0;sy<h;sy+=5){c.fillStyle='#00E59A';c.fillRect(0,sy,w,1);}c.restore();
+  c.fillStyle='rgba(124,255,205,.32)';
+  for(var i=0;i<P.particles.length;i++){var p=P.particles[i];c.fillRect(p.x*w,p.y*h,p.s*2,p.s*2);}
+  c.save();c.translate(P.ox,P.oy);c.scale(P.vs,P.vs);
+  var S=current(),g=geometry(S);
+  drawDecor(c,S);
+  c.save();c.globalAlpha=clamp(S.alpha,0,1);
+  drawAnchor(c);
+  drawRopes(c,S,g);
+  var tq=((P.t%TAU)+TAU)%TAU;
+  if(S.state==='SWING'&&tq<1.95){
+    var k=clamp((tq-1.38)/0.6,0,1);
+    c.save();c.globalAlpha=(1-k)*0.34;
+    circ(c,g.hx,g.hy,CARD_W*(0.30+k*0.85),null,'rgba(0,229,154,.9)',2.2*(1-k)+0.4);c.restore();
+  }
+  drawClip(c,g);
+  if(/[?&]dbgpts=1/.test(location.search)){        // 验收：红点=计算出的两个挂孔，应正好压在卡片顶边上
+    var wq=CARD_W*0.27,ca2=Math.cos(g.ang),sa2=Math.sin(g.ang);
+    circ(c,g.hx-wq*ca2-22*sa2,g.hy-wq*sa2+22*ca2,7,'#FF3040',null,0);
+    circ(c,g.hx+wq*ca2-22*sa2,g.hy+wq*sa2+22*ca2,7,'#FF3040',null,0);
+  }
+  c.restore();
+  drawCardStack(c,S,g);
+  c.restore();
+  tx(c,'[ '+P.state+' ]  t='+P.t.toFixed(2)+'s  '+P.mode,14,h-14,10,'rgba(0,229,154,.55)','400','left');
+  tx(c,'DRAG / FLIP / PINCH',w-14,h-14,10,'rgba(0,229,154,.55)','400','right');
+}
+function drawDecor(c,S){
+  c.save();c.globalAlpha=.05;tx(c,'AI PASS 2026',LW/2,LH*0.90,86,G.term,'700','center');c.restore();
+  var lg=c.createLinearGradient(0,LH-120,0,LH);
+  lg.addColorStop(0,'rgba(0,229,154,0)');lg.addColorStop(1,'rgba(0,229,154,.24)');
+  c.save();c.globalAlpha=.16;c.fillStyle=lg;c.fillRect(0,LH-120,LW,120);c.restore();
+  if(S.tagIn>0.01){
+    var tags=['[ QLIT_AI_CLUB ]','[ FELLOW PASS ]','[ 2026 ]'];
+    c.save();c.globalAlpha=S.tagIn;
+    for(var i=0;i<3;i++){
+      var x=52+i*216,y=170+(1-S.tagIn)*36;
+      box(c,x,y,196,40,6,'rgba(0,229,154,.08)','rgba(0,229,154,.4)',1.5);
+      tx(c,tags[i],x+98,y+26,14,G.term,'700','center');
+    }
+    c.restore();
+  }
+  var pop=Math.max(S.brand,S.brandBig);
+  if(pop>0.01){
+    c.save();c.globalAlpha=Math.min(1,pop*(S.brandBig>0.01?0.85:1.1));
+    var z=clamp(pop,0.15,1.15)*(1+S.brandBig*0.35);
+    c.translate(LW/2,300-S.brandBig*55);c.scale(z,z);
+    var fz=fit(c,'知遇 PASS',600,84,'700',cn);
+    tx(c,'知遇 PASS',0,0,fz,G.ink,'700','center',cn);
+    tx(c,'QLIT 人工智能社团  x  WorkBuddy 校园大使',0,36,17,G.mute,'400','center',cn);
+    c.restore();
+  }
+}
+function drawAnchor(c){
+  box(c,AX-44,AY-12,88,14,5,'#0C2C26','rgba(0,229,154,.5)',1.5);
+  circ(c,AX,AY-17,12,null,'rgba(0,229,154,.45)',2);
+  circ(c,AX-30,AY-4,2,'rgba(0,229,154,.8)',null);
+  circ(c,AX+30,AY-4,2,'rgba(0,229,154,.8)',null);
+}
+function strokeRope(c,pts){
+  var i;
+  c.save();c.lineCap='round';c.lineJoin='round';c.lineWidth=13;
+  var grad=c.createLinearGradient(pts[0].x,pts[0].y,pts[SEGS].x,pts[SEGS].y);
+  grad.addColorStop(0,'#0B5F4C');grad.addColorStop(.5,'#28B894');grad.addColorStop(1,'#0B5F4C');
+  c.strokeStyle=grad;c.beginPath();c.moveTo(pts[0].x,pts[0].y);
+  for(i=1;i<=SEGS;i++)c.lineTo(pts[i].x,pts[i].y);
+  c.stroke();
+  c.lineWidth=2;c.strokeStyle='rgba(0,229,154,.55)';c.setLineDash([7,10]);
+  c.beginPath();c.moveTo(pts[0].x,pts[0].y);
+  for(i=1;i<=SEGS;i++)c.lineTo(pts[i].x,pts[i].y);
+  c.stroke();c.restore();
+}
+/* REEL：解析生成 16 段绳点（自然下垂 + 摆动弯曲），确定性、可复现 */
+function ropeCurve(x0,y0,x1,y1,side,bend){
+  var pts=[];
+  for(var i=0;i<=SEGS;i++){
+    var u=i/SEGS;
+    pts.push({x:x0+(x1-x0)*u+side*bend*Math.sin(Math.PI*u),
+             y:y0+(y1-y0)*u+16*Math.sin(Math.PI*u)});
+  }
+  return pts;
+}
+function drawRopes(c,S,g){
+  if(P.mode==='LIVE'&&P.ropes.length){          // LIVE：真实 Verlet 质点
+    for(var r=0;r<P.ropes.length;r++)strokeRope(c,P.ropes[r].pts);
+    return;
+  }
+  /* 绳末端必须钉在「随卡片角旋转」的两个挂孔上，否则摆动时夹子转了、绳没转 → 脱节 */
+  var bend=(S.psi||0)*70+(S.phi||0)*55;
+  var wq=CARD_W*0.27,ca=Math.cos(g.ang),sa=Math.sin(g.ang);
+  strokeRope(c,ropeCurve(AX-14,AY,g.hx-wq*ca-22*sa+bend,g.hy-wq*sa+22*ca,-1,bend));
+  strokeRope(c,ropeCurve(AX+14,AY,g.hx+wq*ca-22*sa+bend,g.hy+wq*sa+22*ca,1,bend));
+}
+function drawClip(c,g){
+  c.save();c.translate(g.hx,g.hy);c.rotate(g.ang);   // 夹子跟卡片一起转，永远咬在牌顶
+  box(c,-18,-8,36,17,4,'#B9D8CD','#5A7B71',1.5);
+  box(c,-5,-3,10,8,2,'#0B2A24',null);
+  c.restore();
+}
+/* 8 子采样动态模糊：0.65 帧窗口内取 8 个时刻，按 1/k 透明度叠加 */
+function drawCardStack(c,S,g){
+  var tq=((P.t%TAU)+TAU)%TAU;
+  var K=(S.blur>0.35&&P.mode==='REEL'&&tq>1.42&&tq<2.4)?8:1;
+  if(K===1){drawCard(c,g.cx,g.cy,g.ang,g.sx,S.scale,S.alpha,S.face,S.psi);return;}
+  for(var i=K-1;i>=0;i--){
+    var sub=sample(P.t-(i/K)*(0.65/60)),sg=geometry(sub);
+    drawCard(c,sg.cx,sg.cy,sg.ang,sg.sx,sub.scale,(0.9/K)*sub.alpha,sub.face,sub.psi);
+  }
+  drawCard(c,g.cx,g.cy,g.ang,g.sx,S.scale,S.alpha,S.face,S.psi);
+}
+function drawCard(c,cx,cy,ang,sx,sc,alpha,face,psi){
+  if(Math.abs(sx)<0.02||alpha<=0)return;
+  c.save();c.globalAlpha=clamp(alpha,0,1);
+  c.translate(cx,cy);c.rotate(ang);
+  c.transform(1,0,clamp((psi||0)*0.30,-0.26,0.26),1,0,0);   // 立体扭转
+  c.scale(sc*sx,sc);
+  c.shadowColor='rgba(0,0,0,.72)';c.shadowBlur=34;c.shadowOffsetY=18;
+  c.drawImage(faces[face],-CARD_W/2,-CARD_H/2,CARD_W,CARD_H);
+  c.shadowColor='transparent';
+  c.lineWidth=2;c.strokeStyle='rgba(0,229,154,.55)';
+  rr(c,-CARD_W/2,-CARD_H/2,CARD_W,CARD_H,12);c.stroke();
+  var lg=c.createLinearGradient(-CARD_W/2,0,CARD_W/2,0);
+  lg.addColorStop(0,'rgba(255,255,255,.10)');lg.addColorStop(.3,'rgba(255,255,255,0)');lg.addColorStop(1,'rgba(0,229,154,.10)');
+  c.fillStyle=lg;rr(c,-CARD_W/2,-CARD_H/2,CARD_W,CARD_H,12);c.fill();
+  c.restore();
+}
+
+/* ---- 指针交互：拖拽甩动 / 双击翻面 / 双指缩放（逻辑坐标） ---- */
+function localPt(e){var r=P.cv.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};}
+function toLogic(p){return {x:(p.x-P.ox)/P.vs,y:(p.y-P.oy)/P.vs};}
+function cardCenter(){var g=geometry(current());return {x:g.cx,y:g.cy};}
+function onDown(e){
+  P.pointers[e.pointerId]=localPt(e);
+  var ids=Object.keys(P.pointers);
+  if(ids.length===2){var a=P.pointers[ids[0]],b=P.pointers[ids[1]];P.pinch=Math.hypot(a.x-b.x,a.y-b.y);P.dragging=false;return;}
+  var p=toLogic(localPt(e)),cc=cardCenter();
+  if(Math.abs(p.x-cc.x)<CARD_W*P.scale*0.62&&Math.abs(p.y-cc.y)<CARD_H*P.scale*0.62){
+    enterLive();P.dragging=true;P.dragId=e.pointerId;P.lastMove=performance.now();
+    P.cv.className='grabbing';setHud('DRAG');
+    try{P.cv.setPointerCapture(e.pointerId);}catch(err){}
+  }
+}
+function onMove(e){
+  if(!P.pointers[e.pointerId])return;
+  P.pointers[e.pointerId]=localPt(e);
+  var ids=Object.keys(P.pointers);
+  if(ids.length===2){
+    var a=P.pointers[ids[0]],b=P.pointers[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(P.pinch){P.scaleTo=clamp(P.scaleTo*(d/P.pinch),0.62,1.75);setHud('PINCH');}
+    P.pinch=d;return;
+  }
+  if(!P.dragging||e.pointerId!==P.dragId)return;
+  var p=toLogic(localPt(e));
+  var dx=p.x-AX,dy=p.y-AY,d=Math.hypot(dx,dy);
+  if(d>ROPE){p.x=AX+dx/d*ROPE;p.y=AY+dy/d*ROPE;}     // 挂绳拉不长
+  var now=performance.now(),dt=Math.max(0.008,(now-P.lastMove)/1000);
+  var nvx=clamp((p.x-P.hx)/dt,-MAXV,MAXV),nvy=clamp((p.y-P.hy)/dt,-MAXV,MAXV);
+  P.vx=P.vx*0.55+nvx*0.45;P.vy=P.vy*0.55+nvy*0.45;    // 松手后的甩动惯性
+  P.hx=p.x;P.hy=p.y;P.lastMove=now;
+  setHud('DRAG');
+}
+function onUp(e){
+  delete P.pointers[e.pointerId];
+  if(Object.keys(P.pointers).length<2)P.pinch=0;
+  if(P.dragging&&e.pointerId===P.dragId){
+    P.dragging=false;P.dragId=null;P.grab=null;P.cv.className='';setHud('LIVE');
+    if(performance.now()-P.lastMove>140){P.vx=0;P.vy=0;}   // 按住不动再松手 = 不甩
+  }
+}
+function bindStage(){
+  var cv=P.cv;
+  cv.addEventListener('pointerdown',onDown);
+  cv.addEventListener('pointermove',onMove);
+  cv.addEventListener('pointerup',onUp);
+  cv.addEventListener('pointercancel',onUp);
+  cv.addEventListener('dblclick',function(){enterLive();startFlip();});
+  cv.addEventListener('wheel',function(e){e.preventDefault();enterLive();P.scaleTo=clamp(P.scaleTo*(e.deltaY>0?0.93:1.07),0.62,1.75);setHud('ZOOM');},{passive:false});
+  window.addEventListener('resize',function(){if(document.getElementById('showView').className.indexOf('on')>=0)resizeStage();});
+}
+
+/* ---------- 编译过场 → 跳转 ---------- */
+var BOOT_LINES=['> reading profile ................ [ OK ]','> rendering card faces .......... [ OK ]','> solving verlet rope .......... [ OK ]','> tuning damped oscillation .. [ OK ]','> READY. here comes your pass.'];
+function generate(){
+  if(!st.name){document.getElementById('fName').focus();document.getElementById('fName').placeholder='先写上你的名字';return;}
+  var boot=document.getElementById('boot'),lines=document.getElementById('bootLines'),bar=document.getElementById('bootBar'),pct=document.getElementById('bootPct');
+  boot.className='boot on';lines.innerHTML='';bar.style.width='0%';pct.textContent='0%';
+  var i=0;
+  (function step(){
+    if(i<BOOT_LINES.length){
+      var d=document.createElement('div');d.innerHTML='<b>'+BOOT_LINES[i]+'</b>';lines.appendChild(d);
+      i++;var p=Math.round(i/BOOT_LINES.length*100);bar.style.width=p+'%';pct.textContent=p+'%';
+      setTimeout(step,165);
+    }else{
+      setTimeout(function(){boot.className='boot';renderFaces();startShow();},220);
+    }
+  })();
+  try{history.pushState({badge:1},'','#badge');}catch(e){}
+}
+function backToForm(){
+  stopShow();
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+}
+function exportImg(){
+  var cv=document.createElement('canvas');cv.width=W*2;cv.height=H*2;
+  var c=cv.getContext('2d');c.setTransform(2,0,0,2,0,0);
+  c.save();rr(c,0,0,W,H,26);c.clip();(P.face?back:front)(c);c.restore();
+  c.save();rr(c,1,1,W-2,H-2,26);c.lineWidth=2;c.strokeStyle='rgba(0,229,154,.28)';c.stroke();c.restore();
+  var url=cv.toDataURL('image/png');
+  document.getElementById('saveImg').src=url;
+  document.getElementById('dlBtn').dataset.url=url;
+  document.getElementById('modalTitle').textContent=P.face?'[ SAVE ] 工牌背面':'[ SAVE ] 工牌正面';
+  document.getElementById('modal').className='modal on';
+}
+
+function init(){
+  P.cv=document.getElementById('stage');bindStage();
+  var host=/[?&]host=1/.test(location.search);
+  if(host)document.body.className='host';
+  var isFile=/^file:/i.test(location.href);
+  var isLocal=isFile||/^(127\.0\.0\.1|localhost)$/i.test(location.hostname);
+  document.getElementById('modeTag').textContent=isLocal?'v1.3.1 · LOCAL':'v1.3.1 · PUBLIC';
+  load();build();
+  document.getElementById('fName').value=st.name;
+  document.getElementById('fNo').value=st.no;
+  document.getElementById('fTalk').value=st.talk;
+  document.getElementById('qrDesc').textContent=(st.qr==='site'||isFile)?'社团知识库入口':'本页地址';
+  var pp=new URLSearchParams(location.search);pp.delete('host');var pqs=pp.toString();
+  document.getElementById('printLink').href='print.html'+(pqs?'?'+pqs:'');
+  document.getElementById('qrBtn').textContent='QR: '+(st.qr==='site'?'社团站点':'现场入口');
+  sync();
+  if(host){
+    var u=isFile?SITE:cleanUrl(),note=document.querySelector('.host-only .note');
+    if(isFile)note.textContent='当前是单机预览（file://），二维码指向备用社团站点。正式现场请用公网链接或双击 start.bat 起局域网服务。';
+    else if(isLocal)note.innerHTML='<b style="color:#D6000F">[ 注意 ]</b> 你正在用 127.0.0.1 打开，手机扫这个码会打不开！请用公网链接，或「现场地址.txt」里的局域网地址。';
+    else note.textContent='公网模式：把左边二维码给同学扫，或把上方地址发到群。同学填完资料会跳转到动态挂绳立牌。';
+    document.getElementById('hostUrl').textContent=u;
+    KBQR.draw(document.getElementById('hostQR'),u,{size:600,dark:'#06120F',light:'#FFFFFF'});
+  }
+  document.getElementById('fName').addEventListener('input',function(e){st.name=e.target.value.trim();autoNo();sync();});
+  document.getElementById('fNo').addEventListener('input',function(e){st.no=e.target.value.replace(/\D/g,'').slice(0,4);sync();});
+  document.getElementById('fTalk').addEventListener('change',function(e){st.talk=e.target.value;sync();});
+  document.getElementById('genBtn').addEventListener('click',generate);
+  document.getElementById('backBtn').addEventListener('click',backToForm);
+  document.getElementById('replayBtn').addEventListener('click',function(){P.t=0;P.last=0;P.mode='REEL';P.face=0;P.flipping=false;P.flipPhase=0;P.scale=1;P.scaleTo=1;P.grab=null;P.ropes=[];P.acc=0;P.state='COVER';setHud('COVER');if(!P.running){P.running=true;P.raf=requestAnimationFrame(frame);}});
+  document.getElementById('flipBtn').addEventListener('click',function(){enterLive();startFlip();});
+  document.getElementById('saveBtn').addEventListener('click',exportImg);
+  document.getElementById('stampBtn').addEventListener('click',function(){
+    var i=st.stamps.indexOf(0);if(i<0){setHud('ALL STAMPS');return;}
+    enterLive();st.stamps[i]=1;save();renderFaces();if(P.face!==1)startFlip(1);setHud('STAMP '+String(i+1).padStart(2,'0'));
+  });
+  document.getElementById('qrBtn').addEventListener('click',function(){
+    st.qr=st.qr==='site'?'local':'site';this.textContent='QR: '+(st.qr==='site'?'社团站点':'现场入口');
+    document.getElementById('qrDesc').textContent=st.qr==='site'?'社团知识库入口':'本页地址';sync();
+  });
+  document.getElementById('clearBtn').addEventListener('click',function(){
+    if(!confirm('清空本机资料，重新填写？'))return;
+    try{localStorage.removeItem('qlit-pass-v1');}catch(e){}
+    st={name:'',track:0,tags:[],talk:TALKS[0],no:'001',stamps:[1,0,0,0,0],qr:'local'};
+    document.getElementById('fName').value='';document.getElementById('fNo').value='001';document.getElementById('fTalk').value=TALKS[0];
+    sync();
+  });
+  document.getElementById('dlBtn').addEventListener('click',function(){
+    var a=document.createElement('a');a.href=this.dataset.url;a.download='知遇PASS_'+(st.name||'同学')+'_'+(P.face?'背面':'正面')+'.png';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+  });
+  document.getElementById('closeBtn').addEventListener('click',function(){document.getElementById('modal').className='modal';});
+  document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)this.className='modal';});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.getElementById('modal').className='modal';if(document.getElementById('showView').className.indexOf('on')>=0)backToForm();}});
+  window.addEventListener('popstate',function(){if(document.getElementById('showView').className.indexOf('on')>=0)stopShow();});
+  /* 自检 / 自动演示：?selftest=1 / ?auto=1 */
+  var auto=/[?&](selftest|auto)=1/.test(location.search);
+  if(auto){
+    var f=document.getElementById('fName');f.value='测试同学';f.dispatchEvent(new Event('input'));
+    document.querySelectorAll('#dirPick .chip')[2].click();
+    document.querySelectorAll('#tagPick .chip')[0].click();document.querySelectorAll('#tagPick .chip')[1].click();
+    generate();
+    if(/[?&]selftest=1/.test(location.search)){
+      setTimeout(function(){
+        var showing=document.getElementById('showView').className.indexOf('on')>=0;
+        var cv=document.createElement('canvas');cv.width=W*2;cv.height=H*2;
+        var c=cv.getContext('2d');c.setTransform(2,0,0,2,0,0);front(c);
+        var ok=cv.toDataURL('image/png').indexOf('data:image/png')===0;
+        var S=current(),g=geometry(S),vis=g.cy+CARD_H/2>0&&g.cy-CARD_H/2<LH;
+        var o=document.createElement('div');o.id='selftest';
+        o.textContent='SELFTEST=showing='+showing+'|frames='+P.frames+'|mode='+P.mode+'|state='+S.state+'|theta='+S.theta.toFixed(3)+'|phi='+S.phi.toFixed(3)+'|blur='+S.blur.toFixed(2)+'|face='+P.face+'|png='+ok+'|cardY='+g.cy.toFixed(0)+'|visible='+vis+'|dirChips='+document.querySelectorAll('#dirPick .chip').length+'|tagChips='+document.querySelectorAll('#tagPick .chip').length;
+        document.body.appendChild(o);
+      },1800);
+    }
+  }
+}
+init();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getModule } from '../../site.config';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  return docs
+    .filter((d) => !d.data.draft)
+    .map((d) => ({
+      params: { slug: d.id },
+      props: { entry: d },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const mod = getModule(entry.id.split('/')[0]);
+---
+
+<BaseLayout title={entry.data.title}>
+  <nav class="crumbs">
+    <a href="/">首页</a> /
+    <a href={`/m/${mod?.slug ?? ''}`}>{mod?.title}</a> /
+    <span>{entry.data.title}</span>
+  </nav>
+
+  <article class="doc">
+    <header class="doc-head">
+      <h1>{entry.data.title}</h1>
+      <div class="meta">
+        {entry.data.applies_to && <span>适用：{entry.data.applies_to}</span>}
+        {entry.data.updated && <span>更新：{entry.data.updated}</span>}
+        {entry.data.source && <span>来源：{entry.data.source}</span>}
+      </div>
+      {
+        entry.data.tags.length > 0 && (
+          <div class="tags">
+            {entry.data.tags.map((t) => (
+              <span class="tag">#{t}</span>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    <div class="prose" data-pagefind-body>
+      <Content />
+    </div>
+
+    <footer class="doc-foot">
+      <p>
+        内容由在校同学共建，仅供参考。如发现过期或错漏，欢迎
+        <a href={`mailto:${'campus-library@example.com'}`}>反馈纠错</a>。
+      </p>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .crumbs {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .doc-head {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+  }
+  .doc-head h1 {
+    font-size: 24px;
+    margin: 0 0 10px;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .prose {
+    font-size: 15px;
+  }
+  .prose :global(h2) {
+    margin-top: 28px;
+    font-size: 19px;
+  }
+  .prose :global(h3) {
+    margin-top: 20px;
+    font-size: 16px;
+  }
+  .prose :global(ol),
+  .prose :global(ul) {
+    padding-left: 22px;
+  }
+  .prose :global(code) {
+    background: #f0f1f3;
+    padding: 1px 6px;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+  .prose :global(pre) {
+    background: #1f2329;
+    color: #e6e6e6;
+    padding: 14px;
+    border-radius: 10px;
+    overflow: auto;
+  }
+  .prose :global(pre code) {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+  .doc-foot {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+  }
+</style>

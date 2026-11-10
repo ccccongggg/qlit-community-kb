@@ -1,0 +1,24 @@
+name: 提问与协作
+description: 说明一个具体问题，寻找建议或协作者
+title: "[提问] "
+body:
+  - type: markdown
+    attributes:
+      value: "这是公开讨论区。不要提交密码、令牌、学号、私人联系方式或未授权资料。"
+  - type: textarea
+    id: goal
+    attributes:
+      label: 场景与目标
+      description: 谁遇到了什么问题，希望实现什么？
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 已尝试的方法与复现步骤
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望结果与可公开的参考资料
