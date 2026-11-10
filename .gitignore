@@ -1,8 +1,9 @@
 # ===== 依赖与构建产物 =====
 node_modules/
 dist/
-public/            # Hexo 构建输出
 build/
+# Hexo 构建输出（仅 community-kb，避免误伤 Astro 的 public/ 源资源）
+community-kb/public/
 
 # ===== 缓存与临时文件 =====
 .cache/
@@ -19,7 +20,6 @@ yarn-error.log*
 *.swp
 
 # ===== 私有资料占位（方式 C 使用）=====
-# campus-library/private/   # 真实敏感资料放此并 gitignore
 campus-library/private/
 
 # ===== 环境变量 =====
